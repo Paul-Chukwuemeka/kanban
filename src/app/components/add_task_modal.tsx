@@ -34,17 +34,6 @@ const AddTaskModal = () => {
         </div>
         <div className="flex flex-col gap-3">
           <p className="text-lg font-medium text-[#7C8CA4]">Subtasks</p>
-          <span className="flex items-center gap-2">
-            <input
-              type="text"
-              placeholder="e.g Take coffee break"
-              className="w-full border border-[#7c8ca4ac] rounded-md p-3 focus:outline-none px-4"
-            />
-            <button className="text-2xl text-[#7C8CA4] cursor-pointer">
-              <FaXmark />
-            </button>
-          </span>
-
         </div>
         <button className="flex items-center self-center gap-2 bg-[#7247ce] font-semibold text-white p-3 rounded-full hover:bg-[#5a34a0] transition-colors duration-200 cursor-pointer w-full justify-center">
           <FaPlus /> Add New Subtask

@@ -39,24 +39,23 @@ interface Board {
   columns: [];
 }
 
-const boards = localStorage.getItem("boards") ? JSON.parse(localStorage.getItem("boards")): [] as Board
-
-
 const boardsSlice = createSlice({
   name: "boards",
   initialState: { value: [] as Board[] },
-  reducers:{
+  reducers: {
     addBoard: (state, action: { payload: Board }) => {
-      state.value.push(action.payload)
-  }
-}});
-
+      state.value.push(action.payload);
+    },
+    setBoards: (state, action: { payload: Board[] }) => {
+      state.value = action.payload;
+    },
+  },
+});
 
 export const { toggleTheme } = themeSlice.actions;
 export const { toggleSidebar } = sidebarSlice.actions;
 export const { toggleAddTaskModal } = addTaskModalSlice.actions;
-export const { addBoard } = boardsSlice.actions;
-
+export const { addBoard, setBoards } = boardsSlice.actions;
 
 export const themeReducer = themeSlice.reducer;
 export const sidebarReducer = sidebarSlice.reducer;

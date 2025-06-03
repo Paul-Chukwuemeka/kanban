@@ -18,7 +18,7 @@ const Sidebar = () => {
     >
       <div className=" gap-6 py-6 flex flex-col">
         <h3 className="px-5 font-semibold text-sm text-[#7C8CA4] uppercase">
-          All Boards ( <span>3</span> )
+          All Boards ( <span>0</span> )
         </h3>
         <ul className="w-full flex flex-col pr-4">
           <li

@@ -3,7 +3,7 @@ import { HiOutlineViewBoards } from "react-icons/hi";
 import { FaPlus, FaMoon,} from "react-icons/fa";
 import { MdWbSunny } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import { toggleTheme } from "../redux/slices/slices";
+import { toggleTheme,toggleAddBoardModal } from "../redux/slices/slices";
 import type { RootState } from "../redux/store";
 
 const Sidebar = () => {
@@ -21,19 +21,15 @@ const Sidebar = () => {
           All Boards ( <span>0</span> )
         </h3>
         <ul className="w-full flex flex-col pr-4">
-          <li
-            className={`py-4  flex gap-3 items-center text-sm w-full hover:duration-250 hover:text-[#7247ce] rounded-[0px_40px_40px_0] board px-5 cursor-pointer ${
-              darkMode ? "hover:bg-white" : "hover:bg-[#ded8ec6b]"
-            } bg-[#7533C9] text-white `}
-          >
-            <HiOutlineViewBoards className="text-xl" />
-            App Launch
-          </li>
+
 
           <li
             className={`py-4  text-[#7247ce] flex gap-2 items-center text-sm w-full hover:duration-250 hover:text-[#7247ce] rounded-[0px_40px_40px_0] board px-5 cursor-pointer ${
               darkMode ? "hover:bg-white " : "hover:bg-[#ded8ec6b]"
             }`}
+            onClick={()=>{
+              dispatch(toggleAddBoardModal())
+            }}
           >
             <HiOutlineViewBoards className="text-xl" />{" "}
             <span className="flex items-center gap-1">
@@ -41,7 +37,7 @@ const Sidebar = () => {
             </span>
           </li>
         </ul>
-      </div>
+      </div>oo
       <div className="flex flex-col gap-4 p-5 mb-18 ">
         <div
           className={`flex w-full text-[#7C8CA4] items-center justify-center space-x-6 ${

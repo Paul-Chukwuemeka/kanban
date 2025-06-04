@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { FaXmark, FaPlus } from "react-icons/fa6";
+import { FaPlus } from "react-icons/fa6";
 import { toggleAddTaskModal } from "../redux/slices/slices";
 
 const AddTaskModal = () => {

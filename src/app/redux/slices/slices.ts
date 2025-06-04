@@ -31,6 +31,16 @@ const addTaskModalSlice = createSlice({
     },
   },
 });
+// Add Board Modal slice
+const addBoardModalSlice = createSlice({
+  name: "addBoardModal",
+  initialState: { value: false },
+  reducers: {
+    toggleAddBoardModal: (state) => {
+      state.value = !state.value;
+    },
+  },
+});
 
 // Boards Slice
 interface Board {
@@ -55,9 +65,11 @@ const boardsSlice = createSlice({
 export const { toggleTheme } = themeSlice.actions;
 export const { toggleSidebar } = sidebarSlice.actions;
 export const { toggleAddTaskModal } = addTaskModalSlice.actions;
+export const { toggleAddBoardModal } = addBoardModalSlice.actions;
 export const { addBoard, setBoards } = boardsSlice.actions;
 
 export const themeReducer = themeSlice.reducer;
 export const sidebarReducer = sidebarSlice.reducer;
 export const addTaskModalReducer = addTaskModalSlice.reducer;
+export const addBoardModalReducer = addBoardModalSlice.reducer;
 export const boardsReducer = boardsSlice.reducer;

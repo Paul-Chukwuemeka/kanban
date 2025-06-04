@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { themeReducer, sidebarReducer, addTaskModalReducer,boardsReducer } from "./slices/slices";
+import { themeReducer, sidebarReducer, addTaskModalReducer,boardsReducer,addBoardModalReducer } from "./slices/slices";
 
 const store = configureStore({
   reducer: {
@@ -7,6 +7,7 @@ const store = configureStore({
     sidebar: sidebarReducer,
     addTaskModal: addTaskModalReducer,
     boards: boardsReducer,
+    addBoardModal: addBoardModalReducer,
   },
 });
 export default store;

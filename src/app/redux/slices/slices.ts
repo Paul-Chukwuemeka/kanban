@@ -46,17 +46,18 @@ const addBoardModalSlice = createSlice({
 interface Board {
   id: string;
   name: string;
-  columns: [];
+  currentBoard?: boolean;
+  columns: { name: string }[];
 }
 
 const boardsSlice = createSlice({
   name: "boards",
   initialState: { value: [] as Board[] },
   reducers: {
-    addBoard: (state, action: { payload: Board }) => {
+    addNewBoard: (state, action: { payload: Board }) => {
       state.value.push(action.payload);
     },
-    setBoards: (state, action: { payload: Board[] }) => {
+    setBoards: (state, action) => {
       state.value = action.payload;
     },
   },
@@ -66,7 +67,7 @@ export const { toggleTheme } = themeSlice.actions;
 export const { toggleSidebar } = sidebarSlice.actions;
 export const { toggleAddTaskModal } = addTaskModalSlice.actions;
 export const { toggleAddBoardModal } = addBoardModalSlice.actions;
-export const { addBoard, setBoards } = boardsSlice.actions;
+export const { addNewBoard, setBoards } = boardsSlice.actions;
 
 export const themeReducer = themeSlice.reducer;
 export const sidebarReducer = sidebarSlice.reducer;

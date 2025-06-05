@@ -30,7 +30,7 @@ const Header = () => {
             <FaPlus />
             Add New Task
           </button>
-          <button className="text-xl">
+          <button className="text-xl cursor-pointer">
             <BsThreeDotsVertical />
           </button>
         </div>

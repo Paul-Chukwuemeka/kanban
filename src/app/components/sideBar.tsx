@@ -1,15 +1,19 @@
 import React from "react";
 import { HiOutlineViewBoards } from "react-icons/hi";
-import { FaPlus, FaMoon,} from "react-icons/fa";
+import { FaPlus, FaMoon } from "react-icons/fa";
 import { MdWbSunny } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import { toggleTheme,toggleAddBoardModal } from "../redux/slices/slices";
+import { toggleTheme, toggleAddBoardModal } from "../redux/slices/slices";
 import type { RootState } from "../redux/store";
+
 
 const Sidebar = () => {
   const darkMode = useSelector((state: RootState) => state.theme.value);
   const isSidebarOpen = useSelector((state: RootState) => state.sidebar.value);
+  const boards = useSelector((state: RootState) => state.boards.value);
   const dispatch = useDispatch();
+
+
   return (
     <div
       className={`${darkMode ? "bg-[#2C2A37]" : "bg-white"} ${
@@ -21,14 +25,26 @@ const Sidebar = () => {
           All Boards ( <span>0</span> )
         </h3>
         <ul className="w-full flex flex-col pr-4">
-
+          {boards.map((board) => {
+            return (
+              <li
+                className={`py-4  text-[#7247ce] flex capitalize gap-2 items-center text-sm w-full hover:duration-250 hover:text-[#7247ce] rounded-[0px_40px_40px_0] board px-5 cursor-pointer ${
+                  darkMode ? "hover:bg-white " : "hover:bg-[#ded8ec6b]"
+                }`}
+                key={board.id}
+              >
+                <HiOutlineViewBoards className="text-xl" />
+                {board.name}
+              </li>
+            );
+          })}
 
           <li
             className={`py-4  text-[#7247ce] flex gap-2 items-center text-sm w-full hover:duration-250 hover:text-[#7247ce] rounded-[0px_40px_40px_0] board px-5 cursor-pointer ${
               darkMode ? "hover:bg-white " : "hover:bg-[#ded8ec6b]"
             }`}
-            onClick={()=>{
-              dispatch(toggleAddBoardModal())
+            onClick={() => {
+              dispatch(toggleAddBoardModal());
             }}
           >
             <HiOutlineViewBoards className="text-xl" />{" "}
@@ -37,7 +53,7 @@ const Sidebar = () => {
             </span>
           </li>
         </ul>
-      </div>oo
+      </div>
       <div className="flex flex-col gap-4 p-5 mb-18 ">
         <div
           className={`flex w-full text-[#7C8CA4] items-center justify-center space-x-6 ${
@@ -59,7 +75,6 @@ const Sidebar = () => {
           </button>
           <FaMoon className="-rotate-z-20" />
         </div>
-
       </div>
     </div>
   );

@@ -1,18 +1,32 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { HiOutlineViewBoards } from "react-icons/hi";
 import { FaPlus, FaMoon } from "react-icons/fa";
 import { MdWbSunny } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import { toggleTheme, toggleAddBoardModal } from "../redux/slices/slices";
+import {
+  toggleTheme,
+  toggleAddBoardModal,
+  setCurrentBoard,
+} from "../redux/slices/slices";
 import type { RootState } from "../redux/store";
-
 
 const Sidebar = () => {
   const darkMode = useSelector((state: RootState) => state.theme.value);
   const isSidebarOpen = useSelector((state: RootState) => state.sidebar.value);
   const boards = useSelector((state: RootState) => state.boards.value);
+  const currentBoard = useSelector(
+    (state: RootState) => state.currentBoard.value
+  );
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    const storedBoard = localStorage.getItem("currentBoard");
+    if (storedBoard) {
+      dispatch(setCurrentBoard(JSON.parse(storedBoard)));
+    } else if (boards.length > 0) {
+      dispatch(setCurrentBoard(boards[0]));
+    }
+  }, [boards, dispatch]);
 
   return (
     <div
@@ -22,15 +36,20 @@ const Sidebar = () => {
     >
       <div className=" gap-6 py-6 flex flex-col">
         <h3 className="px-5 font-semibold text-sm text-[#7C8CA4] uppercase">
-          All Boards ( <span>0</span> )
+          All Boards ( <span>{boards.length}</span> )
         </h3>
-        <ul className="w-full flex flex-col pr-4">
+        <ul className="w-full flex flex-col pr-6">
           {boards.map((board) => {
+            const isActive = currentBoard && board.name == currentBoard.name;
             return (
               <li
-                className={`py-4  text-[#7247ce] flex capitalize gap-2 items-center text-sm w-full hover:duration-250 hover:text-[#7247ce] rounded-[0px_40px_40px_0] board px-5 cursor-pointer ${
+                className={`py-3  text-[#7C8CA4] flex capitalize gap-2 items-center text-md w-full hover:duration-250 hover:text-[#7247ce] rounded-[0px_40px_40px_0] board px-5 cursor-pointer ${
                   darkMode ? "hover:bg-white " : "hover:bg-[#ded8ec6b]"
-                }`}
+                } ${isActive ? "bg-[#7247ce] text-white" : ""}`}
+                onClick={() => {
+                  dispatch(setCurrentBoard(board));
+                  localStorage.setItem("currentBoard",JSON.stringify(board))
+                }}
                 key={board.id}
               >
                 <HiOutlineViewBoards className="text-xl" />

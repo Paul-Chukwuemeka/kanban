@@ -10,6 +10,7 @@ import { toggleAddBoardModal } from "./redux/slices/slices";
 import { FaPlus } from "react-icons/fa";
 import { useEffect } from "react";
 import { setBoards } from "./redux/slices/slices";
+import EditBoardModal  from "./components/edit_board_modal";
 
 export default function Home() {
   const darkMode = useSelector((state: RootState) => state.theme.value);
@@ -18,6 +19,9 @@ export default function Home() {
   );
   const isAddBoardModalOpen = useSelector(
     (state: RootState) => state.addBoardModal.value
+  );
+    const isEditBoardModalOpen = useSelector(
+    (state: RootState) => state.editBoardModal.value
   );
 
   const dispatch = useDispatch();
@@ -36,6 +40,7 @@ export default function Home() {
     >
       {isAddTaskModalOpen && <AddTaskModal />}
       {isAddBoardModalOpen && <AddBoardModal />}
+      {isEditBoardModalOpen && <EditBoardModal/>}
       <Header />
       <main className="relative flex-1 flex">
         <Sidebar />

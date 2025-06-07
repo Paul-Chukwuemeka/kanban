@@ -52,6 +52,16 @@ const EditBoardModalSlice = createSlice({
     },
   },
 });
+
+const DeleteBoardModalSlice = createSlice({
+  name:"deleteslice",
+  initialState:{value : false},
+  reducers:{
+    toggleDeleteModal: (state)=>{
+      state.value = !state.value
+    }
+  }
+})
 // Boards Slice
 interface Board {
   id: string;
@@ -101,6 +111,7 @@ export const { toggleEditBoardModal } = EditBoardModalSlice.actions;
 export const { setBoards } = boardsSlice.actions;
 export const { deleteBoard } = boardsSlice.actions;
 export const {setCurrentBoard} = currentBoardSlice.actions
+export const {toggleDeleteModal} = DeleteBoardModalSlice.actions
 
 export const themeReducer = themeSlice.reducer;
 export const sidebarReducer = sidebarSlice.reducer;
@@ -109,3 +120,4 @@ export const addBoardModalReducer = addBoardModalSlice.reducer;
 export const EditBoardModalReducer = EditBoardModalSlice.reducer;
 export const boardsReducer = boardsSlice.reducer;
 export const currentBoardReducer = currentBoardSlice.reducer
+export const deleteBoardModalReducer = DeleteBoardModalSlice.reducer

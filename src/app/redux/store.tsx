@@ -1,5 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { themeReducer, sidebarReducer, addTaskModalReducer,boardsReducer,addBoardModalReducer, currentBoardReducer, EditBoardModalReducer } from "./slices/slices";
+import {
+  themeReducer,
+  sidebarReducer,
+  addTaskModalReducer,
+  boardsReducer,
+  addBoardModalReducer,
+  currentBoardReducer,
+  EditBoardModalReducer,
+  deleteBoardModalReducer,
+} from "./slices/slices";
 
 const store = configureStore({
   reducer: {
@@ -7,9 +16,10 @@ const store = configureStore({
     sidebar: sidebarReducer,
     addTaskModal: addTaskModalReducer,
     editBoardModal: EditBoardModalReducer,
+    deleteBoardModal: deleteBoardModalReducer,
     boards: boardsReducer,
     addBoardModal: addBoardModalReducer,
-    currentBoard: currentBoardReducer
+    currentBoard: currentBoardReducer,
   },
 });
 export default store;

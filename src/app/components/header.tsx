@@ -4,7 +4,7 @@ import { FaPlus } from "react-icons/fa";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { useSelector, useDispatch } from "react-redux";
 import type { RootState } from "../redux/store";
-import { toggleAddTaskModal,toggleEditBoardModal,deleteBoard } from "../redux/slices/slices";
+import { toggleAddTaskModal,toggleEditBoardModal,toggleDeleteModal } from "../redux/slices/slices";
 
 const Header = () => {
   const [isOptions, setIsOptions] = useState(false);
@@ -57,10 +57,10 @@ const Header = () => {
                 Edit board
               </button>
               <button
-                className="font-normal text-red-500 "
+                className="font-normal cursor-pointer text-red-500 "
                 onClick={() => {
                   setIsOptions((isOptions) => !isOptions);
-                  dispatch(deleteBoard(currentBoard && currentBoard.id))
+                  dispatch(toggleDeleteModal())
                 }}
               >
                 Delete board

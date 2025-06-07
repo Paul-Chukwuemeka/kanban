@@ -2,6 +2,8 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { FaPlus } from "react-icons/fa6";
 import { toggleAddTaskModal } from "../redux/slices/slices";
+import type { RootState } from "../redux/store";
+
 
 const AddTaskModal = () => {
   const dispatch = useDispatch();

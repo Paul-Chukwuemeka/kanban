@@ -26,6 +26,7 @@ const Header = () => {
     } else {
       dispatch(setCurrentBoard(null));
       localStorage.removeItem("currentBoard");
+      localStorage.removeItem("boards")
     }
   }, [dispatch, boards]);
 

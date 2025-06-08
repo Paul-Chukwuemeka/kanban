@@ -1,10 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
 import type { RootState } from "../redux/store";
-import {
-  toggleDeleteModal,
-  deleteBoard,
-
-} from "../redux/slices/slices";
+import { toggleDeleteModal, deleteBoard } from "../redux/slices/slices";
 import { useEffect } from "react";
 
 const Deleteboardmodal = () => {
@@ -15,8 +11,13 @@ const Deleteboardmodal = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-
-    localStorage.setItem("boards", JSON.stringify(boards));
+    if (boards.length === 0) {
+      localStorage.removeItem("boards");
+      localStorage.removeItem("currentBoard");
+    } else {
+      localStorage.setItem("boards", JSON.stringify(boards));
+      localStorage.setItem("currentBoard", JSON.stringify(boards[0]));
+    }
   }, [boards, dispatch]);
 
   return (

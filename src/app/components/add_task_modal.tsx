@@ -62,7 +62,9 @@ const AddTaskModal = () => {
                 <FaXmark
                   className="text-2xl text-[#7C8CA4]"
                   onClick={() => {
-                    setSubTasks(subTasks.filter((_, i) => i !== subTasks.indexOf(subtask)));
+                    setSubTasks(
+                      subTasks.filter((_, i) => i !== subTasks.indexOf(subtask))
+                    );
                   }}
                 />
               </div>
@@ -86,9 +88,14 @@ const AddTaskModal = () => {
             id=""
             className="w-full h-full focus:outline-none bg-transparent border border-[#7C8CA4] rounded-md p-3 px-4 cursor-pointer"
           >
-            <option value="todo">Todo</option>
-            <option value="in-progress">Doing</option>
-            <option value="done">Done</option>
+            {currentBoard &&
+              currentBoard.columns.map((column, index) => {
+                return (
+                  <option value={column.name} key={index}>
+                    {column.name}
+                  </option>
+                );
+              })}
           </select>
         </div>
         <button className="w-full bg-[#7247ce] text-white p-3 font-semibold rounded-full hover:bg-[#5a34a0] transition-colors duration-200 cursor-pointer">

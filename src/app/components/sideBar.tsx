@@ -48,7 +48,6 @@ const Sidebar = () => {
                 } ${isActive ? "bg-[#7247ce] text-white" : ""}`}
                 onClick={() => {
                   dispatch(setCurrentBoard(board));
-                  localStorage.setItem("currentBoard",JSON.stringify(board))
                 }}
                 key={board.id}
               >

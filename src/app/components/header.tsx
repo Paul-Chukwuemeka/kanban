@@ -23,16 +23,14 @@ const Header = () => {
   useEffect(() => {
     if (boards.length > 0) {
       dispatch(setCurrentBoard(boards[0]));
-    } else {
+    } else if (boards.length === 0) {
       dispatch(setCurrentBoard(null));
-      localStorage.removeItem("currentBoard");
-      localStorage.removeItem("boards")
     }
-  }, [dispatch, boards]);
+  }, [boards, dispatch]);
 
   return (
     <header
-      className={`flex p-5 relative font-semibold ${
+      className={`flex p-5 relative font-semibold  ${
         darkMode ? "bg-[#2C2A37] text-white" : "bg-white"
       }`}
     >

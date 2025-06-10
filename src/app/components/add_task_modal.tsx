@@ -14,7 +14,7 @@ const AddTaskModal = () => {
   );
   const [taskName, setTaskName] = useState("");
   const [description, setDescription] = useState("");
-  const [subTasks, setSubTasks] = useState([{name:""}]);
+  const [subTasks, setSubTasks] = useState([{ name: "" }]);
 
   return (
     <div
@@ -43,26 +43,39 @@ const AddTaskModal = () => {
         </div>
         <div>
           <p className="text-lg font-medium text-[#7C8CA4]">Description</p>
-          <textarea className="w-full border border-[#7C8CA4] rounded-sm p-3 focus:outline-none px-4" 
-          onChange={(e)=>{
-            setDescription(e.currentTarget.value)
-          }}
+          <textarea
+            className="w-full border border-[#7C8CA4] rounded-sm p-3 focus:outline-none px-4"
+            onChange={(e) => {
+              setDescription(e.currentTarget.value);
+            }}
           />
         </div>
         <div className="flex flex-col gap-3">
           <p className="text-lg font-medium text-[#7C8CA4]">Subtasks</p>
-          {
-            subTasks.map((subtask,index)=>{
-              return(
-                <div key={index} className="flex items-center gap-2">
-                  <input type="text" className="border border-[#7C8CA4] focus:outline-none flex-1 p-3 rounded-md"/>
-                  <FaXmark className="text-2xl text-[#7C8CA4]"/>
-                </div>
-              )
-            })
-          }
+          {subTasks.map((subtask, index) => {
+            return (
+              <div key={index} className="flex items-center gap-2">
+                <input
+                  type="text"
+                  className="border border-[#7C8CA4] focus:outline-none flex-1 p-3 rounded-md"
+                />
+                <FaXmark
+                  className="text-2xl text-[#7C8CA4]"
+                  onClick={() => {
+                    setSubTasks(subTasks.filter((_, i) => i !== subTasks.indexOf(subtask)));
+                  }}
+                />
+              </div>
+            );
+          })}
         </div>
-        <button className="flex items-center self-center gap-2 bg-[#7247ce] font-semibold text-white p-3 rounded-full hover:bg-[#5a34a0] transition-colors duration-200 cursor-pointer w-full justify-center">
+        <button
+          className="flex items-center self-center gap-2 bg-[#7247ce] font-semibold text-white p-3 rounded-full hover:bg-[#5a34a0] transition-colors duration-200 cursor-pointer w-full justify-center"
+          onClick={() => {
+            const subTasksArr = [...subTasks, { name: "" }];
+            setSubTasks(subTasksArr);
+          }}
+        >
           <FaPlus /> Add New Subtask
         </button>
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updateBoard } from "../redux/slices/slices";
 import { useState } from "react";
@@ -15,6 +15,19 @@ const AddTaskModal = () => {
   const [taskName, setTaskName] = useState("");
   const [description, setDescription] = useState("");
   const [subTasks, setSubTasks] = useState([{ name: "" }]);
+  const [task, setTask] = useState<{ name: string; description: string; subTasks: { name: string }[] }>({
+    name: "",
+    description: "",
+    subTasks: [],
+  });
+
+  useEffect(() => {
+    setTask({
+      name: taskName,
+      description,
+      subTasks: subTasks.filter((subtask) => subtask.name.length > 3),
+    });
+  }, [description,subTasks, taskName]);
 
   return (
     <div
@@ -58,6 +71,12 @@ const AddTaskModal = () => {
                 <input
                   type="text"
                   className="border border-[#7C8CA4] focus:outline-none flex-1 p-3 rounded-md"
+                  onInput={(e) => {
+                    const newSubTasksArray = subTasks.map((subtask,i)=>{
+                    return  i ==  index ? {name : e.currentTarget.value} : subtask
+                    })
+                    console.log(newSubTasksArray);
+                  }}
                 />
                 <FaXmark
                   className="text-2xl text-[#7C8CA4]"
@@ -98,7 +117,12 @@ const AddTaskModal = () => {
               })}
           </select>
         </div>
-        <button className="w-full bg-[#7247ce] text-white p-3 font-semibold rounded-full hover:bg-[#5a34a0] transition-colors duration-200 cursor-pointer">
+        <button
+          className="w-full bg-[#7247ce] text-white p-3 font-semibold rounded-full hover:bg-[#5a34a0] transition-colors duration-200 cursor-pointer"
+          onClick={() => {
+            console.log(task);
+          }}
+        >
           Create Task
         </button>
       </div>

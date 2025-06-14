@@ -26,7 +26,7 @@ const AddBoardModal = () => {
     setBoard({
       id: uuidv4(),
       name: boardName,
-      columns: columns.map((column) => ({ name: column.name })),
+      columns: columns.map((column) => ({ name: column.name ,tasks : []})),
     });
   }, [boardName, columns]);
 

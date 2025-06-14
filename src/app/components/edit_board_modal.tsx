@@ -5,10 +5,17 @@ import { toggleEditBoardModal } from "../redux/slices/slices";
 import { FaXmark, FaPlus } from "react-icons/fa6";
 import { RootState } from "../redux/store";
 
+interface Board{
+  name: string;
+  id: string;
+  columns: {name : string}[]
+}
+
+
 const EditBoardModal = () => {
   const dispatch = useDispatch();
   const currentBoard = useSelector(
-    (state: RootState) => state.currentBoard.value
+    (state: RootState) => state.currentBoard.value as Board | null
   );
   const [board, setBoard] = useState({});
   const [boardName, setBoardName] = useState(
@@ -22,7 +29,7 @@ const EditBoardModal = () => {
     setBoard({
       id: currentBoard && currentBoard.id,
       name: boardName,
-      columns: columns,
+      columns: columns.filter((column : {name : ""})=> column.name.length),
     });
   }, [boardName, columns, currentBoard]);
 

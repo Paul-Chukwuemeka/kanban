@@ -8,14 +8,18 @@ import type { RootState } from "../redux/store";
 
 const AddTaskModal = () => {
   const dispatch = useDispatch();
-  const boards = useSelector((state: RootState) => state.boards.value);
   const currentBoard = useSelector(
     (state: RootState) => state.currentBoard.value
   );
   const [taskName, setTaskName] = useState("");
   const [description, setDescription] = useState("");
   const [subTasks, setSubTasks] = useState([{ name: "" }]);
-  const [task, setTask] = useState<{ name: string; description: string; subTasks: { name: string }[] }>({
+  const [status, setStatus] = useState(currentBoard && currentBoard.columns[0].name);
+  const [task, setTask] = useState<{
+    name: string;
+    description: string;
+    subTasks: { name: string }[];
+  }>({
     name: "",
     description: "",
     subTasks: [],
@@ -27,7 +31,7 @@ const AddTaskModal = () => {
       description,
       subTasks: subTasks.filter((subtask) => subtask.name.length > 3),
     });
-  }, [description,subTasks, taskName]);
+  }, [description, subTasks, taskName]);
 
   return (
     <div
@@ -72,10 +76,12 @@ const AddTaskModal = () => {
                   type="text"
                   className="border border-[#7C8CA4] focus:outline-none flex-1 p-3 rounded-md"
                   onInput={(e) => {
-                    const newSubTasksArray = subTasks.map((subtask,i)=>{
-                    return  i ==  index ? {name : e.currentTarget.value} : subtask
-                    })
-                    console.log(newSubTasksArray);
+                    const newSubTasksArray = subTasks.map((subtask, i) => {
+                      return i == index
+                        ? { name: e.currentTarget.value }
+                        : subtask;
+                    });
+                    setSubTasks(newSubTasksArray);
                   }}
                 />
                 <FaXmark
@@ -106,21 +112,43 @@ const AddTaskModal = () => {
             name=""
             id=""
             className="w-full h-full focus:outline-none bg-transparent border border-[#7C8CA4] rounded-md p-3 px-4 cursor-pointer"
+            onChange={(e) => {
+              setStatus(e.target.value);
+            }}
           >
             {currentBoard &&
-              currentBoard.columns.map((column, index) => {
-                return (
-                  <option value={column.name} key={index}>
-                    {column.name}
-                  </option>
-                );
-              })}
+              currentBoard.columns.map(
+                (column: { name: "" }, index: number) => {
+                  return (
+                    <option value={column.name} key={index}>
+                      {column.name}
+                    </option>
+                  );
+                }
+              )}
           </select>
         </div>
         <button
           className="w-full bg-[#7247ce] text-white p-3 font-semibold rounded-full hover:bg-[#5a34a0] transition-colors duration-200 cursor-pointer"
           onClick={() => {
-            console.log(task);
+            if (!currentBoard) {
+              return;
+            }
+
+            const updatedBoard = {
+              ...currentBoard,
+              columns: currentBoard.columns.map((col) => {
+                if (col.name == status) {
+                  col = {
+                    ...col,
+                    tasks: [...col.tasks,task]
+                  }
+                  return col
+                }
+              }),
+            };
+            dispatch(updateBoard(updatedBoard))
+            dispatch(toggleAddTaskModal())
           }}
         >
           Create Task

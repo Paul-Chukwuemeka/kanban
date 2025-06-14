@@ -14,6 +14,16 @@ import { FaPlus } from "react-icons/fa";
 import EditBoardModal from "./components/edit_board_modal";
 import Deleteboardmodal from "./components/delete_board_modal";
 
+interface Task {
+  name: string;
+  description: string;
+  subTasks: { name: string }[];
+}
+interface Column {
+  name: string;
+  tasks: Task[];
+}
+
 export default function Home() {
   const darkMode = useSelector((state: RootState) => state.theme.value);
   const currentBoard = useSelector(
@@ -48,20 +58,42 @@ export default function Home() {
       <main className="relative flex-1 flex ">
         <Sidebar />
         <ToggleSidebarBtn />
-        <div className=" hide-scroll flex-1 flex overflow-scroll p-4">
+        <div className=" hide-scroll flex-1 flex overflow-scroll p-4 ">
           {currentBoard ? (
-            <div className="flex p-4 gap-4">
-              {columns?.map((item, index) => {
-                  return (
-                    <div key={index} className="w-[280px]">
-                      <h1 className="font-semibold text-md  text-[#7C8CA4] tracking-widest">{item.name}</h1>
+            <div className="flex p-4 gap-10">
+              {columns?.map((item: Column, index: number) => {
+                const tasks = item?.tasks;
+                return (
+                  <div key={index} className="w-[280px]">
+                    <h1 className="font-semibold text-md  text-[#7C8CA4] tracking-widest">
+                      {item && item.name}
+                    </h1>
+                    <div className="flex flex-col gap-2">
+                      {tasks?.map((task: Task, index: number) => {
+                          if (!task) return null;
+                          return (
+                            <div
+                              key={index}
+                              className="w-full shadow-lg rounded-lg bg-white p-5 flex gap-1.5 flex-col"
+                            >
+                              <h1 className="text-md font-semibold">
+                                {task.name || 'Untitled Task'}
+                              </h1>
+                              <p className="text-[#7C8CA4] text-sm font-semibold">
+                                {task.subTasks?.length || 0} substasks{" "}
+                              </p>
+                            </div>
+                          );
+                        })}
                     </div>
-                  );
-                })}
-              <div className="w-[200px] bg-[#7c8ca440] cursor-pointer text-[#7247ce] rounded-lg flex gap-2 justify-center items-center"
-              onClick={()=>{
-                dispatch(toggleEditBoardModal())
-              }}
+                  </div>
+                );
+              })}
+              <div
+                className="w-[200px] bg-[#7c8ca440] cursor-pointer text-[#7247ce] rounded-lg flex gap-2 justify-center items-center"
+                onClick={() => {
+                  dispatch(toggleEditBoardModal());
+                }}
               >
                 <FaPlus />
                 <h2 className="text-xl font-semibold">New Column</h2>

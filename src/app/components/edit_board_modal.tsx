@@ -29,7 +29,7 @@ const EditBoardModal = () => {
     setBoard({
       id: currentBoard && currentBoard.id,
       name: boardName,
-      columns: columns.filter((column : {name : ""})=> column.name.length),
+      columns: columns.filter((column)=> column.name.length > 2),
     });
   }, [boardName, columns, currentBoard]);
 

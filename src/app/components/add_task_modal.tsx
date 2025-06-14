@@ -6,15 +6,28 @@ import { FaPlus, FaXmark } from "react-icons/fa6";
 import { toggleAddTaskModal } from "../redux/slices/slices";
 import type { RootState } from "../redux/store";
 
+interface Board {
+  name: string,
+  id: string,
+  columns: {
+    name: string,
+    tasks: Array<{
+      name: string,
+      description: string,
+      subTasks: Array<{ name: string }>
+    }>,
+  }[]
+}
+
 const AddTaskModal = () => {
   const dispatch = useDispatch();
   const currentBoard = useSelector(
-    (state: RootState) => state.currentBoard.value
+    (state: RootState) => state.currentBoard.value ? state.currentBoard.value as Board : null
   );
   const [taskName, setTaskName] = useState("");
   const [description, setDescription] = useState("");
   const [subTasks, setSubTasks] = useState([{ name: "" }]);
-  const [status, setStatus] = useState(currentBoard && currentBoard.columns[0].name);
+  const [status, setStatus] = useState<string | null>(currentBoard ? currentBoard.columns[0].name : null);
   const [task, setTask] = useState<{
     name: string;
     description: string;
@@ -118,8 +131,8 @@ const AddTaskModal = () => {
           >
             {currentBoard &&
               currentBoard.columns.map(
-                (column: { name: "" }, index: number) => {
-                  return (
+                (column, index: number) => {
+                 if(column) return (
                     <option value={column.name} key={index}>
                       {column.name}
                     </option>
@@ -135,16 +148,16 @@ const AddTaskModal = () => {
               return;
             }
 
-            const updatedBoard = {
-              ...currentBoard,
-              columns: currentBoard.columns.map((col) => {
-                if (col.name == status) {
-                  col = {
+            const updatedBoard: Board = {
+              ...currentBoard as Board,
+              columns: (currentBoard as Board).columns.map((col) => {
+                if (col && col.name === status) {
+                  return {
                     ...col,
-                    tasks: [...col.tasks,task]
-                  }
-                  return col
+                    tasks: [...(col.tasks || []), task]
+                  };
                 }
+                return col;
               }),
             };
             dispatch(updateBoard(updatedBoard))

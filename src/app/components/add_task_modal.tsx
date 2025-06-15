@@ -54,7 +54,7 @@ const AddTaskModal = () => {
       }}
     >
       <div
-        className="bg-white w-full max-w-[500px] h-fit min-h-[500px] rounded-lg p-8 flex flex-col ite gap-5"
+        className="bg-white w-full max-w-[450px] h-fit min-h-[500px] rounded-lg p-8 flex flex-col ite gap-5"
         onClick={(e) => {
           e.stopPropagation();
         }}

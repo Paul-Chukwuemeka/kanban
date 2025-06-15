@@ -13,6 +13,8 @@ import {
 import { FaPlus } from "react-icons/fa";
 import EditBoardModal from "./components/edit_board_modal";
 import Deleteboardmodal from "./components/delete_board_modal";
+import ViewTask from "./components/viewTask";
+import { useState } from "react";
 
 interface Task {
   name: string;
@@ -41,6 +43,9 @@ export default function Home() {
   const isDeleteModal = useSelector(
     (state: RootState) => state.deleteBoardModal.value
   );
+  const isViewTask = useSelector(
+    (state: RootState) => state.viewTaskModal.value
+  );
 
   const dispatch = useDispatch();
   const columns = currentBoard ? currentBoard.columns : [];
@@ -54,6 +59,7 @@ export default function Home() {
       {isAddBoardModalOpen && <AddBoardModal />}
       {isEditBoardModalOpen && <EditBoardModal />}
       {isDeleteModal && <Deleteboardmodal />}
+      {isViewTask && <ViewTask/>}
       <Header />
       <main className="relative flex-1 flex ">
         <Sidebar />
@@ -65,26 +71,27 @@ export default function Home() {
                 const tasks = item?.tasks;
                 return (
                   <div key={index} className="w-[280px]">
-                    <h1 className="font-semibold text-md  text-[#7C8CA4] tracking-widest">
+                    <h1 className="font-semibold text-md  text-[#7C8CA4] tracking-widest flex gap-1 pb-3">
                       {item && item.name}
+                      <span>({tasks ? tasks.length : 0})</span>
                     </h1>
                     <div className="flex flex-col gap-2">
                       {tasks?.map((task: Task, index: number) => {
-                          if (!task) return null;
-                          return (
-                            <div
-                              key={index}
-                              className="w-full shadow-lg rounded-lg bg-white p-5 flex gap-1.5 flex-col"
-                            >
-                              <h1 className="text-md font-semibold">
-                                {task.name || 'Untitled Task'}
-                              </h1>
-                              <p className="text-[#7C8CA4] text-sm font-semibold">
-                                {task.subTasks?.length || 0} substasks{" "}
-                              </p>
-                            </div>
-                          );
-                        })}
+                        if (!task) return null;
+                        return (
+                          <div
+                            key={index}
+                            className="w-full cursor-pointer shadow-lg rounded-lg bg-white p-5 flex gap-1.5 flex-col"
+                          >
+                            <h1 className="text-md capitalize font-semibold">
+                              {task.name || "Untitled Task"}
+                            </h1>
+                            <p className="text-[#7C8CA4] text-sm font-semibold">
+                              {task.subTasks?.length || 0} substasks{" "}
+                            </p>
+                          </div>
+                        );
+                      })}
                     </div>
                   </div>
                 );

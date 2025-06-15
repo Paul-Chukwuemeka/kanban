@@ -62,6 +62,16 @@ const DeleteBoardModalSlice = createSlice({
     }
   }
 })
+
+const ViewTaskModalSlice = createSlice({
+  name: "viewTaskSlice",
+  initialState:{value : true},
+  reducers:{
+    toggleViewTask : (state)=>{
+      state.value = !state.value
+    }
+  }
+})
 // Boards Slice
 interface Board {
   id: string;
@@ -133,6 +143,7 @@ export const { updateBoard } = boardsSlice.actions;
 export const { deleteBoard } = boardsSlice.actions;
 export const {setCurrentBoard} = currentBoardSlice.actions
 export const {toggleDeleteModal} = DeleteBoardModalSlice.actions
+export const {toggleViewTask} = ViewTaskModalSlice.actions
 
 export const themeReducer = themeSlice.reducer;
 export const sidebarReducer = sidebarSlice.reducer;
@@ -142,3 +153,4 @@ export const EditBoardModalReducer = EditBoardModalSlice.reducer;
 export const boardsReducer = boardsSlice.reducer;
 export const currentBoardReducer = currentBoardSlice.reducer
 export const deleteBoardModalReducer = DeleteBoardModalSlice.reducer
+export const toggleViewTaskReducer = ViewTaskModalSlice.reducer

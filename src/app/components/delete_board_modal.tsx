@@ -18,7 +18,7 @@ const Deleteboardmodal = () => {
       }}
     >
       <div
-        className="bg-white p-10 rounded-xl flex flex-col w-[520px] space-y-4"
+        className="bg-white p-10 rounded-xl flex flex-col w-[450px] space-y-4"
         onClick={(e) => {
           e.stopPropagation();
         }}

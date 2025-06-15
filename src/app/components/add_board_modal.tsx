@@ -38,7 +38,7 @@ const AddBoardModal = () => {
       }}
     >
       <div
-        className="bg-white w-full max-w-[500px] h-fit rounded-lg p-8 flex flex-col gap-3"
+        className="bg-white w-full max-w-[450px] h-fit rounded-lg p-8 flex flex-col gap-3"
         onClick={(e) => {
           e.stopPropagation();
         }}

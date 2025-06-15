@@ -29,7 +29,7 @@ const EditBoardModal = () => {
     setBoard({
       id: currentBoard && currentBoard.id,
       name: boardName,
-      columns: columns.filter((column)=> column.name.length > 2),
+      columns: columns.filter((column)=> column  &&  column.name.length > 0),
     });
   }, [boardName, columns, currentBoard]);
 
@@ -41,7 +41,7 @@ const EditBoardModal = () => {
       }}
     >
       <div
-        className="bg-white w-full max-w-[500px] h-fit rounded-lg p-8 flex flex-col gap-5"
+        className="bg-white w-full max-w-[450px] h-fit rounded-lg p-8 flex flex-col gap-5"
         onClick={(e) => {
           e.stopPropagation();
         }}
@@ -64,14 +64,15 @@ const EditBoardModal = () => {
         </div>
         <div className="gap-2 flex flex-col">
           <p className="text-[#7C8CA4] text-md font-medium">Board Columns</p>
-          {columns.map((column: { name: string }, index: number) => {
+          {columns && columns.map((column: { name: string }, index: number) => {
+            console.log(columns)
             return (
               <div key={index} className="flex items-center gap-3">
                 <input
                   type="text"
                   className="flex-1 border border-[#7C8CA4] rounded-md p-2 px-3 capitalize placeholder:lowercase focus:outline-none"
                   placeholder="e.g To Do"
-                  defaultValue={column.name}
+                  defaultValue={ column && column.name}
                   onChange={(e) => {
                     const updatedColumns = columns.map((column : {name : string} ,i : number)=>{
                     return i === index ? {...column,name:e.currentTarget.value} : column

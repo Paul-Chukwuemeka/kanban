@@ -8,6 +8,7 @@ import {
   currentBoardReducer,
   EditBoardModalReducer,
   deleteBoardModalReducer,
+  toggleViewTaskReducer
 } from "./slices/slices";
 
 const store = configureStore({
@@ -20,6 +21,7 @@ const store = configureStore({
     boards: boardsReducer,
     addBoardModal: addBoardModalReducer,
     currentBoard: currentBoardReducer,
+    viewTaskModal:toggleViewTaskReducer
   },
 });
 export default store;

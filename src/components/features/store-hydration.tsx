@@ -2,7 +2,8 @@
 
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { setBoards, setCurrentBoard } from '../redux/slices/slices';
+import { setBoards } from '../../lib/redux/slices/boardsSlice';
+import { setCurrentBoard } from '../../lib/redux/slices/currentBoardSlice';
 
 export function StoreHydration() {
   const dispatch = useDispatch();

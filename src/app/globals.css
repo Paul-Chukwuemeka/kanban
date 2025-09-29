@@ -22,3 +22,12 @@ ul{
     width: 0px;
   }
 }
+
+.subtask-completed{
+  &::after{
+    background: url("/check.svg") no-repeat;
+    background-size: 14px;
+    background-position: 1px 2px;
+    
+  }
+}

@@ -3,19 +3,21 @@ import { HiOutlineViewBoards } from "react-icons/hi";
 import { FaPlus, FaMoon } from "react-icons/fa";
 import { MdWbSunny } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  toggleTheme,
-  toggleAddBoardModal,
-  setCurrentBoard,
-} from "../redux/slices/slices";
-import type { RootState } from "../redux/store";
+import { toggleTheme } from "../../lib/redux/slices/themeSlice";
+import { setCurrentBoard } from "../../lib/redux/slices/currentBoardSlice";
+import type { RootState } from "../../lib/redux/store";
+import { Board } from "@/types";
 
-const Sidebar = () => {
+type SidebarProps = {
+  setAddBoardModalOpen: (isOpen: boolean) => void;
+};
+
+const Sidebar = ({setAddBoardModalOpen}: SidebarProps) => {
   const darkMode = useSelector((state: RootState) => state.theme.value);
   const isSidebarOpen = useSelector((state: RootState) => state.sidebar.value);
   const boards = useSelector((state: RootState) => state.boards.value);
   const currentBoard = useSelector(
-    (state: RootState) => state.currentBoard.value
+    (state: RootState) => state.currentBoard.value as Board | null
   );
   const dispatch = useDispatch();
 
@@ -62,7 +64,7 @@ const Sidebar = () => {
               darkMode ? "hover:bg-white " : "hover:bg-[#ded8ec6b]"
             }`}
             onClick={() => {
-              dispatch(toggleAddBoardModal());
+              setAddBoardModalOpen(true);
             }}
           >
             <HiOutlineViewBoards className="text-xl" />{" "}

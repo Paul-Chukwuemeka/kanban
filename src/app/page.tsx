@@ -1,78 +1,85 @@
 "use client";
-import Header from "./components/header";
-import Sidebar from "./components/sideBar";
+import Header from "../components/layout/header";
+import Sidebar from "../components/layout/sideBar";
 import { useSelector, useDispatch } from "react-redux";
-import type { RootState } from "./redux/store";
-import ToggleSidebarBtn from "./components/sidebar_btn";
-import AddTaskModal from "./components/add_task_modal";
-import AddBoardModal from "./components/add_board_modal";
-import {
-  toggleAddBoardModal,
-  toggleEditBoardModal,
-} from "./redux/slices/slices";
-import { FaPlus } from "react-icons/fa";
-import EditBoardModal from "./components/edit_board_modal";
-import Deleteboardmodal from "./components/delete_board_modal";
-import ViewTask from "./components/viewTask";
 import { useState } from "react";
-
-interface Task {
-  name: string;
-  description: string;
-  subTasks: { name: string }[];
-}
-interface Column {
-  name: string;
-  tasks: Task[];
-}
+import type { RootState } from "../lib/redux/store";
+import ToggleSidebarBtn from "../components/ui/sidebarBtn";
+import AddTaskModal from "../components/features/add_task_modal";
+import AddBoardModal from "../components/features/add_board_modal";
+import { setCurrentTask } from "../lib/redux/slices/currentTaskSlice";
+import { FaPlus } from "react-icons/fa";
+import EditBoardModal from "../components/features/edit_board_modal";
+import Deleteboardmodal from "../components/features/delete_board_modal";
+import ViewTask from "../components/features/view_Task";
+import { Task, Column, Board } from "@/types";
+import EditTaskModal from "@/components/features/edit_Task_Modal";
+import DeleteTaskModal from "@/components/features/delete_task_modal";
 
 export default function Home() {
   const darkMode = useSelector((state: RootState) => state.theme.value);
   const currentBoard = useSelector(
-    (state: RootState) => state.currentBoard.value
+    (state: RootState) => state.currentBoard.value as Board | null
   );
-  const isAddTaskModalOpen = useSelector(
-    (state: RootState) => state.addTaskModal.value
-  );
-  const isAddBoardModalOpen = useSelector(
-    (state: RootState) => state.addBoardModal.value
-  );
-  const isEditBoardModalOpen = useSelector(
-    (state: RootState) => state.editBoardModal.value
-  );
-  const isDeleteModal = useSelector(
-    (state: RootState) => state.deleteBoardModal.value
-  );
-  const isViewTask = useSelector(
-    (state: RootState) => state.viewTaskModal.value
-  );
-
   const dispatch = useDispatch();
+  const [isAddTaskModalOpen, setAddTaskModalOpen] = useState(false);
+  const [isAddBoardModalOpen, setAddBoardModalOpen] = useState(false);
+  const [isEditBoardModalOpen, setEditBoardModalOpen] = useState(false);
+  const [isDeleteModal, setDeleteModalOpen] = useState(false);
+  const [isViewTask, setViewTaskOpen] = useState(false);
+  const [isDeleteTaskModalOpen, setDeleteTaskModalOpen] = useState(false);
+  const [isEditTaskModalOpen, setEditTaskModalOpen] = useState(false);
   const columns = currentBoard ? currentBoard.columns : [];
+
   return (
     <div
       className={`flex flex-col h-screen w-screen ${
         darkMode && "bg-[#211F2C]"
       }`}
     >
-      {isAddTaskModalOpen && <AddTaskModal />}
-      {isAddBoardModalOpen && <AddBoardModal />}
-      {isEditBoardModalOpen && <EditBoardModal />}
-      {isDeleteModal && <Deleteboardmodal />}
-      {isViewTask && <ViewTask/>}
-      <Header />
+      {isDeleteTaskModalOpen && (
+        <DeleteTaskModal onClose={() => setDeleteTaskModalOpen(false)} />
+      )}
+      {isEditTaskModalOpen && (
+        <EditTaskModal onClose={() => setEditTaskModalOpen(false)} />
+      )}
+
+      {isAddTaskModalOpen && (
+        <AddTaskModal onClose={() => setAddTaskModalOpen(false)} />
+      )}
+      {isAddBoardModalOpen && (
+        <AddBoardModal onClose={() => setAddBoardModalOpen(false)} />
+      )}
+      {isEditBoardModalOpen && (
+        <EditBoardModal onClose={() => setEditBoardModalOpen(false)} />
+      )}
+      {isDeleteModal && (
+        <Deleteboardmodal onClose={() => setDeleteModalOpen(false)} />
+      )}
+      {isViewTask && (
+        <ViewTask
+          onClose={() => setViewTaskOpen(false)}
+          setIsEditTaskModalOpen={setEditTaskModalOpen}
+          setIsDeleteTaskModalOpen={setDeleteTaskModalOpen}
+        />
+      )}
+      <Header
+        setEditBoardModalOpen={setEditBoardModalOpen}
+        setAddTaskModalOpen={setAddTaskModalOpen}
+        setDeleteBoardModalOpen={setDeleteModalOpen}
+      />
       <main className="relative flex-1 flex ">
-        <Sidebar />
+        <Sidebar setAddBoardModalOpen={setAddBoardModalOpen} />
         <ToggleSidebarBtn />
         <div className=" hide-scroll flex-1 flex overflow-scroll p-4 ">
           {currentBoard ? (
             <div className="flex p-4 gap-10">
-              {columns?.map((item: Column, index: number) => {
-                const tasks = item?.tasks;
+              {columns?.map((column: Column, index: number) => {
+                const tasks = column?.tasks;
                 return (
                   <div key={index} className="w-[280px]">
-                    <h1 className="font-semibold text-md  text-[#7C8CA4] tracking-widest flex gap-1 pb-3">
-                      {item && item.name}
+                    <h1 className="font-semibold text-md capitalize text-[#7C8CA4] tracking-widest flex gap-1 pb-3">
+                      {column && column.name}
                       <span>({tasks ? tasks.length : 0})</span>
                     </h1>
                     <div className="flex flex-col gap-2">
@@ -82,6 +89,10 @@ export default function Home() {
                           <div
                             key={index}
                             className="w-full cursor-pointer shadow-lg rounded-lg bg-white p-5 flex gap-1.5 flex-col"
+                            onClick={() => {
+                              dispatch(setCurrentTask(task));
+                              setViewTaskOpen(true);
+                            }}
                           >
                             <h1 className="text-md capitalize font-semibold">
                               {task.name || "Untitled Task"}
@@ -99,7 +110,7 @@ export default function Home() {
               <div
                 className="w-[200px] bg-[#7c8ca440] cursor-pointer text-[#7247ce] rounded-lg flex gap-2 justify-center items-center"
                 onClick={() => {
-                  dispatch(toggleEditBoardModal());
+                  setEditBoardModalOpen(true);
                 }}
               >
                 <FaPlus />
@@ -111,7 +122,7 @@ export default function Home() {
               <p>No boards available. Please create a board to get started.</p>
               <button
                 className="mt-2 text-lg px-4 py-4 bg-[#7247ce] text-white rounded-full hover:bg-blue-600 flex items-center gap-2"
-                onClick={() => dispatch(toggleAddBoardModal())}
+                onClick={() => setAddBoardModalOpen(true)}
               >
                 <FaPlus /> Create New Board
               </button>

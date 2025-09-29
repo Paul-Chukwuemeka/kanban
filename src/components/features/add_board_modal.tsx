@@ -1,12 +1,15 @@
 import { useDispatch, useSelector } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
-import { setBoards } from "../redux/slices/slices";
+import { setBoards } from "../../lib/redux/slices/boardsSlice";
 import { useState, useEffect } from "react";
-import { toggleAddBoardModal } from "../redux/slices/slices";
 import { FaXmark, FaPlus } from "react-icons/fa6";
-import { RootState } from "../redux/store";
+import { RootState } from "../../lib/redux/store";
 
-const AddBoardModal = () => {
+type AddBoardModalProps = {
+  onClose: () => void;
+};
+
+const AddBoardModal = ({ onClose }: AddBoardModalProps) => {
   const dispatch = useDispatch();
   const boards = useSelector((state: RootState) => state.boards.value);
   const [error, setError] = useState({
@@ -26,16 +29,14 @@ const AddBoardModal = () => {
     setBoard({
       id: uuidv4(),
       name: boardName,
-      columns: columns.map((column) => ({ name: column.name ,tasks : []})),
+      columns: columns.map((column) => ({ name: column.name, tasks: [] })),
     });
   }, [boardName, columns]);
 
   return (
     <div
       className="absolute top-0 left-0 w-full h-full bg-[#00000052] flex justify-center items-center z-[100]"
-      onClick={() => {
-        dispatch(toggleAddBoardModal());
-      }}
+      onClick={onClose}
     >
       <div
         className="bg-white w-full max-w-[450px] h-fit rounded-lg p-8 flex flex-col gap-3"
@@ -58,9 +59,6 @@ const AddBoardModal = () => {
               });
             }}
           />
-          {error.isError && (
-            <p className="text-red-500 text-md p-2">{error.reason}</p>
-          )}
         </div>
         <div className="gap-2 flex flex-col">
           <p className="text-[#7C8CA4] text-md font-medium">Board Columns</p>
@@ -91,33 +89,50 @@ const AddBoardModal = () => {
             );
           })}
         </div>
-        <button className="w-full flex items-center justify-center bg-[#7247ce] text-white p-3 font-semibold rounded-full hover:bg-[#5a34a0] transition-colors duration-200 cursor-pointer"
-        onClick={()=>{
-          const newColumns = [...columns,{name : ''}]
-          setColumns(newColumns)
-        }}
-        >
+        <button
+          className="w-full flex items-center justify-center bg-[#7247ce] text-white p-3 font-semibold rounded-full hover:bg-[#5a34a0] transition-colors duration-200 cursor-pointer"
+          onClick={() => {
+            const newColumns = [...columns, { name: "" }];
+            setColumns(newColumns);
+          }}
+          >
           <FaPlus />
           Add New Column
         </button>
         <button
           className="w-full bg-[#7247ce] text-white p-3 font-semibold rounded-full hover:bg-[#5a34a0] transition-colors duration-200 cursor-pointer"
           onClick={() => {
-            if (boards.every((b) => b.name !== board.name)) {
-              dispatch(setBoards([...boards, board]));
-              dispatch(toggleAddBoardModal());
-              setBoardName("");
-              setColumns([{ name: "" }]);
-            } else {
+            try {
+              if (!boards.every((b) => b.name.toLowerCase() !== board.name.toLowerCase())) {
+                throw new Error("Board name must be unique");
+              } else if (board.name.trim() === "") {
+                throw new Error("Board name is required");
+              } 
+              else if(board.columns.length === 0 || board.columns.some((col) => col.name.trim() === "")) {
+                throw new Error("All columns must have a name");
+              }
+              else if (board.columns.length !== new Set(board.columns.map(col => col.name)).size) {
+                throw new Error("Column names must be unique");
+              }
+              else {
+                dispatch(setBoards([...boards, board]));
+                onClose();
+                setBoardName("");
+                setColumns([{ name: "" }]);
+              }
+            } catch (error) {
               setError({
                 isError: true,
-                reason: "Board with this name already exists",
+                reason: String(error),
               });
             }
           }}
-        >
+          >
           Create New Board
         </button>
+          {error.isError && (
+            <p className="text-red-500 text-center text-md p-2">{error.reason}</p>
+          )}
       </div>
     </div>
   );

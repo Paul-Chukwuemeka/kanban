@@ -3,19 +3,21 @@ import { PiKanbanFill } from "react-icons/pi";
 import { FaPlus } from "react-icons/fa";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { useSelector, useDispatch } from "react-redux";
-import type { RootState } from "../redux/store";
-import {
-  toggleAddTaskModal,
-  toggleEditBoardModal,
-  toggleDeleteModal,
-  setCurrentBoard,
-} from "../redux/slices/slices";
+import type { RootState } from "@/lib/redux/store";
+import { setCurrentBoard } from "@/lib/redux/slices/currentBoardSlice";
+import { Board } from "@/types";
 
-const Header = () => {
-  const [isOptions, setIsOptions] = useState(false);
+type HeaderProps = {
+  setEditBoardModalOpen: (isOpen: boolean) => void;
+  setDeleteBoardModalOpen: (isOpen: boolean) => void;
+  setAddTaskModalOpen: (isOpen: boolean) => void;
+};
+
+const Header = ({setEditBoardModalOpen,setDeleteBoardModalOpen,setAddTaskModalOpen}: HeaderProps) => {
+  const [showOptions, setShowOptions] = useState(false);
   const darkMode = useSelector((state: RootState) => state.theme.value);
   const currentBoard = useSelector(
-    (state: RootState) => state.currentBoard.value
+    (state: RootState) => state.currentBoard.value as Board | null
   );
   const boards = useSelector((state: RootState) => state.boards.value);
   const dispatch = useDispatch();
@@ -47,7 +49,7 @@ const Header = () => {
             <button
               className="flex items-center gap-1 text-white p-4 py-2.5 cursor-pointer rounded-3xl bg-[#7247ce]"
               onClick={() => {
-                dispatch(toggleAddTaskModal());
+                setAddTaskModalOpen(true);
               }}
             >
               <FaPlus />
@@ -56,18 +58,18 @@ const Header = () => {
             <button
               className="text-xl cursor-pointer"
               onClick={() => {
-                setIsOptions((isOptions) => !isOptions);
+                setShowOptions((isOptions) => !isOptions);
               }}
             >
               <BsThreeDotsVertical />
             </button>
-            {isOptions && (
+            {showOptions && (
               <div className="bg-white text-md z-[100] p-4 rounded-md flex flex-col items-start gap-1 shadow-[0px_1px_2px_#7C8CA4] absolute top-full right-5">
                 <button
                   className="font-normal text-[#7C8CA4] cursor-pointer "
                   onClick={() => {
-                    dispatch(toggleEditBoardModal());
-                    setIsOptions((isOptions) => !isOptions);
+                    setShowOptions((isOptions) => !isOptions);
+                    setEditBoardModalOpen(true)
                   }}
                 >
                   Edit board
@@ -75,8 +77,8 @@ const Header = () => {
                 <button
                   className="font-normal cursor-pointer text-red-500 "
                   onClick={() => {
-                    setIsOptions((isOptions) => !isOptions);
-                    dispatch(toggleDeleteModal());
+                    setShowOptions((isOptions) => !isOptions);
+                    setDeleteBoardModalOpen(true)
                   }}
                 >
                   Delete board

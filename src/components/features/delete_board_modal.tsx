@@ -1,11 +1,14 @@
 import { useSelector, useDispatch } from "react-redux";
-import type { RootState } from "../redux/store";
-import { toggleDeleteModal, deleteBoard } from "../redux/slices/slices";
+import type { RootState } from "../../lib/redux/store";
+import { deleteBoard } from "../../lib/redux/slices/boardsSlice";
+import { Board } from "@/types";
 
-const Deleteboardmodal = () => {
-  const currentBoard = useSelector(
-    (state: RootState) => state.currentBoard.value
-  );
+type DeleteboardmodalProps = {
+  onClose: () => void;
+};
+
+const Deleteboardmodal = ({ onClose }: DeleteboardmodalProps) => {
+  const currentBoard = useSelector((state: RootState) => state.currentBoard.value) as Board | null;
   const dispatch = useDispatch();
 
 
@@ -13,9 +16,7 @@ const Deleteboardmodal = () => {
   return (
     <div
       className="absolute flex items-center justify-center z-[100] h-screen w-screen bg-[#00000052]"
-      onClick={() => {
-        dispatch(toggleDeleteModal());
-      }}
+      onClick={onClose}
     >
       <div
         className="bg-white p-10 rounded-xl flex flex-col w-[450px] space-y-4"
@@ -36,7 +37,7 @@ const Deleteboardmodal = () => {
             className="w-1/2 border bg-red-500 text-white cursor-pointer p-3 py-2 rounded-full"
             onClick={() => {
               dispatch(deleteBoard(currentBoard && currentBoard.id));
-              dispatch(toggleDeleteModal());
+              onClose();
             }}
           >
             Delete
@@ -44,7 +45,7 @@ const Deleteboardmodal = () => {
           <button
             className="w-1/2 border bg-[#b5c0d2] cursor-pointer border-none p-3 py-2 rounded-full"
             onClick={() => {
-              dispatch(toggleDeleteModal());
+              onClose();
             }}
           >
             Cancel

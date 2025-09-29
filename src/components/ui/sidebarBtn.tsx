@@ -1,6 +1,6 @@
 "use client"
-import { toggleSidebar } from "../redux/slices/slices";
-import type { RootState } from "../redux/store";
+import { toggleSidebar } from "../../lib/redux/slices/sidebarSlice";
+import type { RootState } from "../../lib/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 

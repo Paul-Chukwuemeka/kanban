@@ -1,0 +1,142 @@
+import { RootState } from "@/lib/redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { FaTimes, FaPlus } from "react-icons/fa";
+import { Board, SubTask, Task } from "@/types";
+import { useEffect, useState } from "react";
+import { updateBoard } from "@/lib/redux/slices/boardsSlice";
+
+type EditTaskModalProps = {
+  onClose: () => void;
+};
+
+const EditTaskModal = ({ onClose }: EditTaskModalProps) => {
+  const [task, setTask] = useState<Task>({
+    id: "",
+    name: "",
+    description: "",
+    subTasks: [] as SubTask[],
+  });
+  const dispatch = useDispatch();
+  const currentTask = useSelector(
+    (state: RootState) => state.currentTask.value
+  );
+  const currentBoard = useSelector(
+    (state: RootState) => state.currentBoard.value!
+  );
+
+  useEffect(() => {
+    if (currentTask) {
+      setTask(currentTask);
+    }
+  }, [currentTask]);
+
+  function handleSave() {
+    const newColumns = (currentBoard as Board).columns.map((column) => {
+      return {
+        ...column,
+        tasks: column.tasks?.map((t) => t.id === currentTask?.id ? task : t)
+      }
+    })
+    const newBoard = {
+      ...(currentBoard as Board),
+      columns: newColumns
+    }
+
+    dispatch(updateBoard(newBoard));
+    onClose();
+  }
+
+  return (
+    <div
+      className="absolute w-full h-screen top-0 flex items-center justify-center left-0 z-10 bg-black/10"
+      onClick={onClose}
+    >
+      <div
+        className="bg-white w-full max-w-lg h-fit min-h-[300px] rounded-lg p-8 flex flex-col ite gap-5"
+        onClick={(e) => {
+          e.stopPropagation();
+        }}
+      >
+        <h1 className="text-2xl font-semibold">Edit Task</h1>
+        <div className="flex flex-col gap-2">
+          <p className="text-[#7C8CA4] text-md font-medium">Task Name</p>
+          <input
+            type="text"
+            placeholder="e.g. Design the landing page"
+            value={task.name}
+            className="w-full border border-[#7C8CA4] rounded-md p-2 px-3 focus:outline-none"
+            onChange={(e) => {
+              setTask({
+                ...task,
+                name: e.target.value,
+              });
+            }}
+          />
+        </div>
+        <div className="flex flex-col gap-2">
+          <p>Description</p>
+          <textarea
+            placeholder="e.g. Create a detailed design document"
+            value={task.description}
+            className="w-full border min-h-20 border-[#7C8CA4] rounded-md p-2 px-3 focus:outline-none"
+            onChange={(e) => {
+              setTask({
+                ...task,
+                description: e.target.value,
+              });
+            }}
+          />
+        </div>
+        <div className="flex flex-col gap-2">
+          <p className="text-[#7C8CA4] text-md font-medium">Subtasks</p>
+          {task &&
+            task.subTasks.map((subtask, index) => (
+              <div className="flex items-center text-md gap-2" key={index}>
+                <input
+                  type="text"
+                  value={subtask.name}
+                  placeholder="e.g. Create wireframes"
+                  className="w-full border border-[#7C8CA4] rounded-md p-2 px-3 focus:outline-none"
+                  onChange={(e) => {
+                    setTask({
+                      ...task,
+                      subTasks: task.subTasks.map((subtask, i) =>
+                        i === index
+                          ? { ...subtask, name: e.target.value }
+                          : subtask
+                      ),
+                    });
+                  }}
+                />
+                <FaTimes className="text-gray-500 cursor-pointer" />
+              </div>
+            ))}
+        </div>
+        <div className="flex flex-col gap-2  items-center">
+          <button
+            className="flex items-center gap-2 bg-[#7247ce] font-semibold text-white h-14 rounded-xl hover:bg-[#5a34a0] transition-colors duration-200 cursor-pointer w-40 justify-center"
+            onClick={() => {
+              setTask({
+                ...task,
+                subTasks: [...task.subTasks, { name: "", id: "" }] as SubTask[],
+              });
+            }}
+          >
+            <FaPlus />
+            Add new task
+          </button>
+          <button
+            className="text-white  font-semibold text-lg h-14 rounded-xl hover:bg-[#5a34a0] cursor-pointer w-40 border bg-[#7247ce]"
+            onClick={() => {
+              handleSave();
+            }}
+          >
+            Save Changes
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default EditTaskModal;

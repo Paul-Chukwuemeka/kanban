@@ -4,6 +4,7 @@ import { setBoards } from "../../lib/redux/slices/boardsSlice";
 import { useState, useEffect } from "react";
 import { FaXmark, FaPlus } from "react-icons/fa6";
 import { RootState } from "../../lib/redux/store";
+import { Task,Column } from "@/types";
 
 type AddBoardModalProps = {
   onClose: () => void;
@@ -19,17 +20,21 @@ const AddBoardModal = ({ onClose }: AddBoardModalProps) => {
   const [board, setBoard] = useState({
     id: "",
     name: "",
-    columns: [{ name: "" }],
+    columns: [{ name: "", tasks: [] as Task[], id: uuidv4() }],
   });
 
   const [boardName, setBoardName] = useState("");
-  const [columns, setColumns] = useState([{ name: "" }]);
+  const [columns, setColumns] = useState<Column[]>([]);
 
   useEffect(() => {
     setBoard({
       id: uuidv4(),
       name: boardName,
-      columns: columns.map((column) => ({ name: column.name, tasks: [] })),
+      columns: columns.map((column) => ({
+        name: column.name,
+        tasks: [],
+        id: column.id,
+      })),
     });
   }, [boardName, columns]);
 
@@ -92,10 +97,10 @@ const AddBoardModal = ({ onClose }: AddBoardModalProps) => {
         <button
           className="w-full flex items-center justify-center bg-[#7247ce] text-white p-3 font-semibold rounded-full hover:bg-[#5a34a0] transition-colors duration-200 cursor-pointer"
           onClick={() => {
-            const newColumns = [...columns, { name: "" }];
+            const newColumns = [...columns, { name: "", id: uuidv4(), tasks: [] }];
             setColumns(newColumns);
           }}
-          >
+        >
           <FaPlus />
           Add New Column
         </button>
@@ -103,22 +108,29 @@ const AddBoardModal = ({ onClose }: AddBoardModalProps) => {
           className="w-full bg-[#7247ce] text-white p-3 font-semibold rounded-full hover:bg-[#5a34a0] transition-colors duration-200 cursor-pointer"
           onClick={() => {
             try {
-              if (!boards.every((b) => b.name.toLowerCase() !== board.name.toLowerCase())) {
+              if (
+                !boards.every(
+                  (b) => b.name.toLowerCase() !== board.name.toLowerCase()
+                )
+              ) {
                 throw new Error("Board name must be unique");
               } else if (board.name.trim() === "") {
                 throw new Error("Board name is required");
-              } 
-              else if(board.columns.length === 0 || board.columns.some((col) => col.name.trim() === "")) {
+              } else if (
+                board.columns.length === 0 ||
+                board.columns.some((col) => col.name.trim() === "")
+              ) {
                 throw new Error("All columns must have a name");
-              }
-              else if (board.columns.length !== new Set(board.columns.map(col => col.name)).size) {
+              } else if (
+                board.columns.length !==
+                new Set(board.columns.map((col) => col.name)).size
+              ) {
                 throw new Error("Column names must be unique");
-              }
-              else {
+              } else {
                 dispatch(setBoards([...boards, board]));
                 onClose();
                 setBoardName("");
-                setColumns([{ name: "" }]);
+                setColumns([{ name: "" , id: uuidv4(), tasks: [] }]);
               }
             } catch (error) {
               setError({
@@ -127,12 +139,12 @@ const AddBoardModal = ({ onClose }: AddBoardModalProps) => {
               });
             }
           }}
-          >
+        >
           Create New Board
         </button>
-          {error.isError && (
-            <p className="text-red-500 text-center text-md p-2">{error.reason}</p>
-          )}
+        {error.isError && (
+          <p className="text-red-500 text-center text-md p-2">{error.reason}</p>
+        )}
       </div>
     </div>
   );

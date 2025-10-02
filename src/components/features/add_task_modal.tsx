@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { updateBoard } from "../../lib/redux/slices/boardsSlice";
 import { useState } from "react";
 import { FaPlus, FaXmark } from "react-icons/fa6";
+import { v4 as uuidv4 } from "uuid";
 import type { RootState } from "../../lib/redux/store";
 
 interface Board {
@@ -36,10 +37,12 @@ const AddTaskModal = ({ onClose }: AddTaskModalProps) => {
   const [task, setTask] = useState<{
     name: string;
     description: string;
+    id: string;
     subTasks: { name: string }[];
   }>({
     name: "",
     description: "",
+    id: "",
     subTasks: [],
   });
 
@@ -47,6 +50,7 @@ const AddTaskModal = ({ onClose }: AddTaskModalProps) => {
     setTask({
       name: taskName,
       description,
+      id: uuidv4(),
       subTasks: subTasks.filter((subtask) => subtask.name !== ""),
     });
   }, [description, subTasks, taskName]);

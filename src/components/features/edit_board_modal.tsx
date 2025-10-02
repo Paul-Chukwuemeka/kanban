@@ -3,6 +3,7 @@ import { updateBoard } from "../../lib/redux/slices/boardsSlice";
 import { useState, useEffect } from "react";
 import { FaXmark, FaPlus } from "react-icons/fa6";
 import { RootState } from "../../lib/redux/store";
+import { v4 as uuidv4 } from "uuid";
 
 interface Board {
   name: string;
@@ -67,9 +68,6 @@ const EditBoardModal = ({ onClose }: EditBoardModalProps) => {
               setBoardName(e.currentTarget.value);
             }}
           />
-          {/* {error.isError && (
-            <p className="text-red-500 text-lg  p-2">{error.reason}</p>
-          )} */}
         </div>
         <div className="gap-2 flex flex-col">
           <p className="text-[#7C8CA4] text-md font-medium">Board Columns</p>
@@ -111,7 +109,10 @@ const EditBoardModal = ({ onClose }: EditBoardModalProps) => {
         <button
           className="w-full flex items-center justify-center bg-[#7247ce] text-white p-3 font-semibold rounded-full hover:bg-[#5a34a0] transition-colors duration-200 cursor-pointer"
           onClick={() => {
-            const updatedColumns = [...columns, { name: "" }];
+            const updatedColumns = [
+              ...columns,
+              { name: "", id: uuidv4(), tasks: [] },
+            ];
             setColumns(updatedColumns);
           }}
         >
@@ -121,7 +122,9 @@ const EditBoardModal = ({ onClose }: EditBoardModalProps) => {
         <button
           className="w-full bg-[#7247ce] text-white p-3 font-semibold rounded-full hover:bg-[#5a34a0] transition-colors duration-200 cursor-pointer"
           onClick={() => {
-            const colNames = board.columns.map((col) => col.name.trim().toLowerCase());
+            const colNames = board.columns.map((col) =>
+              col.name.trim().toLowerCase()
+            );
             const uniqueColNames = new Set(colNames);
             if (colNames.length !== uniqueColNames.size) {
               setError({
@@ -137,7 +140,10 @@ const EditBoardModal = ({ onClose }: EditBoardModalProps) => {
               });
               return;
             }
-            if (board.columns.length === 0 || board.columns.some((col) => col.name.trim() === "")) {
+            if (
+              board.columns.length === 0 ||
+              board.columns.some((col) => col.name.trim() === "")
+            ) {
               setError({
                 isError: true,
                 reason: "All columns must have a name",

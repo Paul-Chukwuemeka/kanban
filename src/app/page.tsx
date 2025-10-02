@@ -2,7 +2,7 @@
 import Header from "../components/layout/header";
 import Sidebar from "../components/layout/sideBar";
 import { useSelector, useDispatch } from "react-redux";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { RootState } from "../lib/redux/store";
 import ToggleSidebarBtn from "../components/ui/sidebarBtn";
 import AddTaskModal from "../components/features/add_task_modal";
@@ -15,6 +15,8 @@ import ViewTask from "../components/features/view_Task";
 import { Task, Column, Board } from "@/types";
 import EditTaskModal from "@/components/features/edit_Task_Modal";
 import DeleteTaskModal from "@/components/features/delete_task_modal";
+import { moveTask } from "@/helper/updateTasks";
+import { updateBoard } from "@/lib/redux/slices/boardsSlice";
 
 export default function Home() {
   const darkMode = useSelector((state: RootState) => state.theme.value);
@@ -29,7 +31,32 @@ export default function Home() {
   const [isViewTask, setViewTaskOpen] = useState(false);
   const [isDeleteTaskModalOpen, setDeleteTaskModalOpen] = useState(false);
   const [isEditTaskModalOpen, setEditTaskModalOpen] = useState(false);
+  const [draggedItem, setDraggedItem] = useState<Task | null>(null);
+  const [dragOriginColumnId, setDragOriginColumnId] = useState<string | null>(
+    null
+  );
+  const boards = useSelector((state: RootState) => state.boards.value);
+
   const columns = currentBoard ? currentBoard.columns : [];
+
+  const handleDrop = (destinationColumnId: string) => {
+    if (draggedItem && dragOriginColumnId && currentBoard) {
+      if (dragOriginColumnId !== destinationColumnId) {
+        const updatedBoard = moveTask(
+          boards,
+          currentBoard.id,
+          draggedItem.id,
+          dragOriginColumnId,
+          destinationColumnId
+        );
+        if (updatedBoard) {
+          dispatch(updateBoard(updatedBoard));
+        }
+      }
+    }
+    setDraggedItem(null);
+    setDragOriginColumnId(null);
+  };
 
   return (
     <div
@@ -77,7 +104,16 @@ export default function Home() {
               {columns?.map((column: Column, index: number) => {
                 const tasks = column?.tasks;
                 return (
-                  <div key={index} className="w-[280px]">
+                  <div
+                    key={index}
+                    className="w-[280px]"
+                    onDragOver={(e) => {
+                      e.preventDefault();
+                    }}
+                    onDrop={() => {
+                      handleDrop(column.id);
+                    }}
+                  >
                     <h1 className="font-semibold text-md capitalize text-[#7C8CA4] tracking-widest flex gap-1 pb-3">
                       {column && column.name}
                       <span>({tasks ? tasks.length : 0})</span>
@@ -88,10 +124,15 @@ export default function Home() {
                         return (
                           <div
                             key={index}
-                            className="w-full cursor-pointer shadow-lg rounded-lg bg-white p-5 flex gap-1.5 flex-col"
+                            className="w-full cursor-grab shadow-lg rounded-lg bg-white p-5 flex gap-1.5 flex-col"
                             onClick={() => {
                               dispatch(setCurrentTask(task));
                               setViewTaskOpen(true);
+                            }}
+                            draggable
+                            onDragStart={() => {
+                              setDraggedItem(task);
+                              setDragOriginColumnId(column.id);
                             }}
                           >
                             <h1 className="text-md capitalize font-semibold">

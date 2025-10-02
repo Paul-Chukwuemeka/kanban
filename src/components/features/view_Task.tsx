@@ -2,7 +2,10 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import { useSelector } from "react-redux";
 import { RootState } from "@/lib/redux/store";
 import { Board, Task } from "@/types";
-import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { updateBoard } from "@/lib/redux/slices/boardsSlice";
+import { useEffect, useState } from "react";
+import { moveTask } from "@/helper/updateTasks";
 
 type ViewTaskProps = {
   onClose: () => void;
@@ -16,13 +19,48 @@ const ViewTask = ({
   setIsDeleteTaskModalOpen,
 }: ViewTaskProps) => {
   const [isOptionsOpen, setIsOptionsOpen] = useState(false);
-
+  const [currentStatus, setCurrentStatus] = useState<string | null>(null);
+  const dispatch = useDispatch();
   const currentTask: Task = useSelector(
     (state: RootState) => state.currentTask.value
   );
   const currentBoard = useSelector(
     (state: RootState) => state.currentBoard.value
   ) as Board | null;
+  const boards = useSelector((state: RootState) => state.boards.value);
+
+  let completedSubtasks = 0;
+  if (currentTask) {
+    completedSubtasks = currentTask.subTasks.filter(
+      (subtask) => subtask.completed
+    ).length;
+  }
+
+  useEffect(() => {
+    if (currentBoard) {
+      const current =
+        currentBoard?.columns.find((col) =>
+          col.tasks.find((task) => task.id === currentTask.id)
+        )?.id || null;
+      setCurrentStatus(current);
+    }
+  }, []);
+
+  function handleStateChange(id: string) {
+    if (!currentBoard) return;
+    if (!currentTask) return;
+    if (id === currentStatus) return;
+    const updatedBoard = moveTask(
+      boards,
+      currentBoard.id,
+      currentTask.id,
+      currentStatus!,
+      id
+    );
+
+    dispatch(updateBoard(updatedBoard));
+    setCurrentStatus(id);
+  }
 
   return (
     <div
@@ -35,7 +73,7 @@ const ViewTask = ({
           e.stopPropagation();
         }}
       >
-        <div className="flex items-center justify-between text-lg gap-3">
+        <div className="flex items-center text-[#7247ce] justify-between text-lg gap-3">
           <h2 className="flex-1 font-bold capitalize">{currentTask.name}</h2>
           <button
             className="cursor-pointer relative"
@@ -79,12 +117,13 @@ const ViewTask = ({
           </button>
         </div>
         {currentTask.description && (
-          <p className="text-[#7C8CA4] text-md font-semibold">
-            {currentTask.description}
+          <p className="text-md font-semibold text-[#4916b7]">
+            {currentTask.description.slice(0, 1).toUpperCase() +
+              currentTask.description.slice(1)}
           </p>
         )}
-        <p className="text-[rgb(124,140,164)] text-md font-semibold">
-          Subtasks (1 of {currentTask.subTasks.length})
+        <p className=" text-[#7247ceba] text-md font-semibold">
+          Subtasks ({completedSubtasks} of {currentTask.subTasks.length})
         </p>
         <div className="text-[#7C8CA4] text-sm font-medium">
           {currentTask.subTasks.map((subtask, i) => (
@@ -103,17 +142,25 @@ const ViewTask = ({
           ))}
         </div>
         <span>Current Status</span>
-        <select
-          name="status"
-          className="border border-[#47424282] capitalize font-medium p-3 rounded-lg px-4 pr-8 appearance-none bg-[length:12px] bg-[right_12px_center] bg-no-repeat bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2212%22%20height%3D%228%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M1%201l5%205%205-5%22%20stroke%3D%22%23635FC7%22%20stroke-width%3D%222%22%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%2F%3E%3C%2Fsvg%3E')] focus:outline-none"
-        >
-          {currentBoard &&
-            currentBoard.columns.map((column, i) => (
-              <option key={i} className="capitalize" value={column.name}>
-                {column.name}
-              </option>
-            ))}
-        </select>
+        <div className="w-full border border-[#47424282] rounded-lg pr-3">
+          <select
+            name="status"
+            className=" w-full  capitalize font-medium p-3  focus:outline-none"
+            value={currentStatus ? currentStatus : ""}
+            onChange={(e) => {
+              handleStateChange(e.target.value);
+            }}
+          >
+            {currentBoard &&
+              currentBoard.columns.map((column, i) => {
+                return (
+                  <option key={i} className="capitalize" value={column.id}>
+                    {column.name}
+                  </option>
+                );
+              })}
+          </select>
+        </div>
       </div>
     </div>
   );

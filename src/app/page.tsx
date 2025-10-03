@@ -7,7 +7,6 @@ import type { RootState } from "../lib/redux/store";
 import ToggleSidebarBtn from "../components/ui/sidebarBtn";
 import AddTaskModal from "../components/features/add_task_modal";
 import AddBoardModal from "../components/features/add_board_modal";
-import { setCurrentTask } from "../lib/redux/slices/currentTaskSlice";
 import { FaPlus } from "react-icons/fa";
 import EditBoardModal from "../components/features/edit_board_modal";
 import Deleteboardmodal from "../components/features/delete_board_modal";
@@ -18,6 +17,7 @@ import DeleteTaskModal from "@/components/features/delete_task_modal";
 import { moveTask } from "@/helper/updateTasks";
 import { updateBoard } from "@/lib/redux/slices/boardsSlice";
 import { ToastContainer, toast } from "react-toastify";
+import ColumnComponent from "@/components/ui/column";
 
 export default function Home() {
   const darkMode = useSelector((state: RootState) => state.theme.value);
@@ -161,52 +161,16 @@ export default function Home() {
               {columns?.map((column: Column, index: number) => {
                 const tasks = column?.tasks;
                 return (
-                  <div
+                  <ColumnComponent
                     key={index}
-                    className="w-[280px]"
-                    onDragOver={(e) => {
-                      e.preventDefault();
-                    }}
-                    onDrop={() => {
-                      handleDrop(column.id);
-                    }}
-                  >
-                    <h1 className="font-semibold text-md capitalize text-[#7C8CA4] tracking-widest flex gap-1 pb-3">
-                      {column && column.name}
-                      <span>({tasks ? tasks.length : 0})</span>
-                    </h1>
-                    <div className="flex flex-col gap-2">
-                      {tasks?.map((task: Task, index: number) => {
-                        if (!task) return null;
-                        return (
-                          <div
-                            key={index}
-                            className={`${
-                              darkMode
-                                ? "bg-[#2C2A37] text-white"
-                                : "bg-white text-black"
-                            } w-full cursor-grab shadow-lg rounded-lg p-5 flex gap-1.5 flex-col`}
-                            onClick={() => {
-                              dispatch(setCurrentTask(task));
-                              setViewTaskOpen(true);
-                            }}
-                            draggable
-                            onDragStart={() => {
-                              setDraggedItem(task);
-                              setDragOriginColumnId(column.id);
-                            }}
-                          >
-                            <h1 className="text-md capitalize font-semibold">
-                              {task.name || "Untitled Task"}
-                            </h1>
-                            <p className="text-[#7C8CA4] text-sm font-semibold">
-                              {task.subTasks?.length || 0} substasks{" "}
-                            </p>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
+                    column={column}
+                    tasks={tasks}
+                    setDraggedItem={setDraggedItem}
+                    setDragOriginColumnId={setDragOriginColumnId}
+                    handleDrop={handleDrop}
+                    setViewTaskOpen={setViewTaskOpen}
+                    darkMode={darkMode}
+                  />
                 );
               })}
               <div

@@ -2,23 +2,27 @@
 
 **High Priority (Core Functionality):**
 1.  **Task Management:**
-    -   [DONE] Implement "Edit Task" functionality. This includes creating an "Edit Task" modal.
-    -   [DONE] Implement "Delete Task" functionality. This should be accessible from the task view.
-    -   [DONE] Implement subtask completion. The checkboxes in `viewTask.tsx` should be functional.
-    -   [DONE] Implement moving tasks between columns. The dropdown in `viewTask.tsx` should be functional.
-2.  [DONE] **Drag and Drop:** Implement drag-and-drop for tasks between columns on the main board view. This is a key feature for a Kanban board.
+    -   [x] Implement "Edit Task" functionality. This includes creating an "Edit Task" modal.
+    -   [x] Implement "Delete Task" functionality. This should be accessible from the task view.
+    -   [x] Implement subtask completion. The checkboxes in `viewTask.tsx` should be functional.
+    -   [x] Implement moving tasks between columns. The dropdown in `viewTask.tsx` should be functional.
+2.  [x] **Drag and Drop:** Implement drag-and-drop for tasks between columns on the main board view. This is a key feature for a Kanban board.
 
 **Medium Priority (UI/UX Improvements & Bug Fixes):**
-1.  [DONE] **Form Validation:** Add validation to all forms (add/edit board, add/edit task) to handle empty inputs and other potential errors.
+1.  [x] **Form Validation:** Add validation to all forms (add/edit board, add/edit task) to handle empty inputs and other potential errors.
 2.  **Subtask Management:**
-    -   [DONE] Allow adding new subtasks to a task.
-    -   [DONE] Allow editing existing subtasks.
-    -   [DONE] Allow deleting subtasks.
+    -   [x] Allow adding new subtasks to a task.
+    -   [x] Allow editing existing subtasks.
+    -   [x] Allow deleting subtasks.
 3.  **UI Polish:**
-    -   Provide feedback to the user after an action is performed (e.g., "Task created successfully").
-    -   Improve empty states (e.g., for columns with no tasks).
+    -  [x] Provide feedback to the user after an action is performed (e.g., "Task created successfully").
+    -  [x] Improve empty states (e.g., for columns with no tasks).
     -   Ensure the UI is fully responsive for different screen sizes.
-    -   [DONE] Fix the hardcoded `true` values in `viewTask.tsx` for subtask completion.
+    -   [x] Fix the hardcoded `true` values in `viewTask.tsx` for subtask completion.
+4.  Create a new component for the task card.
+5.  Implement a loading state for the board.
+6.  [x]Add a confirmation modal before deleting a board.
+7.  [x]Add a confirmation modal before deleting a task.
 
 **Low Priority (Code Quality and Future Features):**
 1.  **Refactoring:**
@@ -33,3 +37,7 @@
     -   Replace `localStorage` with a database (e.g., PostgreSQL, MongoDB) to store user data.
 4.  **Backend:**
     -   Create a proper backend API to handle data persistence instead of relying on `localStorage`.
+5.  Add animations for task transitions.
+6.  Add a search bar to filter tasks.
+7.  Add a feature to assign users to tasks.
+8.  Add a feature to set due dates for tasks.

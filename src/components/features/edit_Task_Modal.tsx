@@ -69,7 +69,7 @@ const EditTaskModal = ({
 
   return (
     <div
-      className="absolute w-full h-screen top-0 flex items-center justify-center left-0 z-10 bg-black/10"
+      className="absolute w-full h-screen p-5 bg-[#00000052] top-0 flex items-center justify-center left-0 z-10"
       onClick={onClose}
     >
       <form

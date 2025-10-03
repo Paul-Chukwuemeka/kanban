@@ -22,7 +22,7 @@ const Deleteboardmodal = ({
 
   return (
     <div
-      className="absolute flex items-center justify-center z-[100] h-screen w-screen bg-[#00000052]"
+      className="absolute flex items-center justify-center z-[100] h-screen w-screen bg-[#00000052] p-5"
       onClick={onClose}
     >
       <div

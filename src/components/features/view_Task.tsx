@@ -77,16 +77,22 @@ const ViewTask = ({
 
   return (
     <div
-      className="absolute top-0 left-0 w-full h-full bg-[#00000052] flex justify-center items-center z-[100]"
+      className="absolute top-0 left-0 w-full h-full bg-[#00000052] p-5 flex justify-center items-center z-[100]"
       onClick={onClose}
     >
       <div
-            className={`w-full max-w-[480px] h-fit rounded-lg p-8 flex flex-col gap-3 ${darkMode ? "bg-[#2C2A37] text-white" : "bg-white text-black"}`}
-            onClick={(e) => {
+        className={`w-full max-w-[480px] h-fit rounded-lg p-8 flex flex-col gap-3 ${
+          darkMode ? "bg-[#2C2A37] text-white" : "bg-white text-black"
+        }`}
+        onClick={(e) => {
           e.stopPropagation();
         }}
       >
-        <div className={`flex items-center ${darkMode ? "text-white" : "text-black"} justify-between text-lg gap-3`}>
+        <div
+          className={`flex items-center ${
+            darkMode ? "text-white" : "text-black"
+          } justify-between text-lg gap-3`}
+        >
           <h2 className="flex-1 font-bold capitalize">{currentTask.name}</h2>
           <button
             className="cursor-pointer relative"
@@ -105,7 +111,13 @@ const ViewTask = ({
               }}
             />
             {isOptionsOpen && (
-              <ul className={`w-30 p-1  text-sm text-left rounded-sm ${darkMode ? "bg-[#2C2A37] text-white shadow-[0_0_5px_2px] shadow-gray-600/50" : "bg-white text-black"} absolute right-0 top-6`}>
+              <ul
+                className={`w-30 p-1  text-sm text-left shadow-[0_0_5px_2px]  rounded-sm ${
+                  darkMode
+                    ? "bg-[#2C2A37] text-white shadow-gray-600/50"
+                    : "bg-white text-black shadow-gray-400/50"
+                } absolute right-0 top-6`}
+              >
                 <li
                   className=" p-0.5 px-2"
                   onClick={(e) => {
@@ -163,7 +175,7 @@ const ViewTask = ({
                   );
                   dispatch(updateBoard(updatedBoard));
                 }}
-                className="relative peer cursor-pointer pl-7 before:w-5 before:h-5 before:border-2 before:border-[#7C8CA4] before:rounded-full before:absolute before:-left-1 before:top-1/2 before:-translate-y-1/2 checked:before:bg-[url('/check.svg')] checked:before:bg-no-repeat checked:before:bg-[length:14px] checked:before:bg-[position:1px_2px] before:bg-white"
+                className="relative peer invisible before:visible cursor-pointer pl-7 before:w-5 before:h-5 before:border-2 before:border-[#7C8CA4] before:rounded-full before:absolute before:-left-1 before:top-1/2 before:-translate-y-1/2 checked:before:bg-[url('/check.svg')] checked:before:bg-no-repeat checked:before:bg-[length:14px] checked:before:bg-[position:1px_2px] before:bg-white"
               />
               <span
                 className={`peer-checked:line-through peer-checked:decoration-2 font-medium`}

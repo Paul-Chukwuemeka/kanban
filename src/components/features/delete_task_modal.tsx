@@ -42,7 +42,7 @@ const DeleteTaskModal = ({ onClose, notifySuccess, notifyError }: DeleteTaskModa
   }
   return (
     <div
-      className="absolute w-full h-screen top-0 flex items-center justify-center left-0 z-10 bg-black/10"
+      className="absolute w-full h-screen top-0 flex items-center justify-center left-0 z-10 bg-[#00000052] p-5"
       onClick={onClose}
     >
       <div className={`w-full max-w-[480px] h-fit rounded-lg p-8 flex flex-col gap-2 ${darkMode ? "bg-[#2C2A37] text-white" : "bg-white text-black"}`}>

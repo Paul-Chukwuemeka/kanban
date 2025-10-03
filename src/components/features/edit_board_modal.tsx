@@ -75,7 +75,7 @@ const EditBoardModal = ({
 
   return (
     <div
-      className="absolute top-0 left-0 w-full h-full bg-[#00000052] flex justify-center items-center z-[100]"
+      className="absolute top-0 left-0 w-full h-full bg-[#00000052] p-5 flex justify-center items-center z-[100]"
       onClick={onClose}
     >
       <form

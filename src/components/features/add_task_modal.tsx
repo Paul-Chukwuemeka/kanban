@@ -101,7 +101,7 @@ const AddTaskModal = ({
 
   return (
     <div
-      className="bg-[#00000052] w-full flex justify-center items-center h-full absolute top-0 left-0 z-[100]"
+      className="bg-[#00000052] p-5 w-full flex justify-center items-center h-full absolute top-0 left-0 z-[100]"
       onClick={onClose}
     >
       <form

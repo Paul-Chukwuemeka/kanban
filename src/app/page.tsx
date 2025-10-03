@@ -155,9 +155,15 @@ export default function Home() {
       <main className="relative flex-1 flex ">
         <Sidebar setAddBoardModalOpen={setAddBoardModalOpen} />
         <ToggleSidebarBtn />
-        <div className="hide-scroll flex-1 flex flex-col overflow-scroll">
-          <h2 className="md:hidden text-lg font-semibold capitalize py-1 px-6 border-b">{currentBoard && currentBoard.name} Board</h2>
-          <div className=" flex p-4 py-1 flex-1 ">
+        <div className=" flex-1 flex flex-col overflow-hidden">
+          <h2
+            className={` ${
+              darkMode && "text-white"
+            } md:hidden text-lg font-semibold capitalize py-1 px-6 `}
+          >
+            {currentBoard && currentBoard.name} Board
+          </h2>
+          <div className=" flex p-4 py-1 flex-1 overflow-auto hide-scroll ">
             {currentBoard ? (
               <div className="flex p-4 gap-10  ">
                 {columns?.map((column: Column, index: number) => {

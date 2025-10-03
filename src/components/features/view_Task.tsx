@@ -1,11 +1,11 @@
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { useSelector } from "react-redux";
 import { RootState } from "@/lib/redux/store";
-import { Board, Task } from "@/types";
+import { Board, SubTask, Task } from "@/types";
 import { useDispatch } from "react-redux";
 import { updateBoard } from "@/lib/redux/slices/boardsSlice";
 import { useEffect, useState } from "react";
-import { moveTask } from "@/helper/updateTasks";
+import { moveTask, updateSubtaskStatus } from "@/helper/updateTasks";
 
 type ViewTaskProps = {
   onClose: () => void;
@@ -20,6 +20,8 @@ const ViewTask = ({
 }: ViewTaskProps) => {
   const [isOptionsOpen, setIsOptionsOpen] = useState(false);
   const [currentStatus, setCurrentStatus] = useState<string | null>(null);
+  const [subTasks, setSubTasks] = useState<SubTask[]>([]);
+  const [completedSubtasks, setCompletedSubtasks] = useState(0);
   const dispatch = useDispatch();
   const currentTask: Task = useSelector(
     (state: RootState) => state.currentTask.value
@@ -29,12 +31,22 @@ const ViewTask = ({
   ) as Board | null;
   const boards = useSelector((state: RootState) => state.boards.value);
 
-  let completedSubtasks = 0;
-  if (currentTask) {
-    completedSubtasks = currentTask.subTasks.filter(
-      (subtask) => subtask.completed
-    ).length;
-  }
+  useEffect(() => {
+    if (subTasks.length <= 0) return;
+    setCompletedSubtasks(
+      subTasks.filter((subtask) => subtask.completed).length
+    );
+    console.log(subTasks);
+  }, [subTasks]);
+
+  useEffect(() => {
+    if (currentTask) {
+      setSubTasks(currentTask.subTasks);
+      setCompletedSubtasks(
+        currentTask.subTasks.filter((subtask) => subtask.completed).length
+      );
+    }
+  }, [currentTask]);
 
   useEffect(() => {
     if (currentBoard) {
@@ -44,7 +56,7 @@ const ViewTask = ({
         )?.id || null;
       setCurrentStatus(current);
     }
-  }, []);
+  }, [currentBoard, currentTask]);
 
   function handleStateChange(id: string) {
     if (!currentBoard) return;
@@ -130,12 +142,31 @@ const ViewTask = ({
             <div key={i} className="capitalize flex gap-4 text-lg">
               <input
                 type="checkbox"
-                checked={subtask.completed}
-                className={`${
-                  subtask.completed && "subtask-completed "
-                } cursor-pointer after:visible  invisible relative  after:w-5 after:h-5 after:border-2 after:border-[#7C8CA4] after:rounded-full after:block after:absolute after:top-1/2 after:-translate-y-1/2 after:-translate-x-1/6 after:left-0"`}
+                checked={subTasks[i]?.completed || false}
+                onChange={() => {
+                  setSubTasks((prevSubtasks) => {
+                    const newSubtasks = [...prevSubtasks];
+                    newSubtasks[i] = {
+                      ...newSubtasks[i],
+                      completed: !newSubtasks[i].completed,
+                    };
+                    return newSubtasks;
+                  });
+                  // Dispatch action to update global state
+                  if (!currentBoard) return;
+                  const updatedBoard = updateSubtaskStatus(
+                    currentBoard,
+                    currentTask.id,
+                    subtask.id,
+                    !subtask.completed
+                  );
+                  dispatch(updateBoard(updatedBoard));
+                }}
+                className="relative peer cursor-pointer pl-7 before:w-5 before:h-5 before:border-2 before:border-[#7C8CA4] before:rounded-full before:absolute before:-left-1 before:top-1/2 before:-translate-y-1/2 checked:before:bg-[url('/check.svg')] checked:before:bg-no-repeat checked:before:bg-[length:14px] checked:before:bg-[position:1px_2px] before:bg-white"
               />
-              <span className={` ${subtask.completed ? "line-through" : ""}`}>
+              <span
+                className={`peer-checked:line-through peer-checked:decoration-2 font-medium`}
+              >
                 {subtask.name}
               </span>
             </div>

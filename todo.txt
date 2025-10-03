@@ -3,11 +3,11 @@
 
 **High Priority (Core Functionality):**
 1.  **Task Management:**
-    -   Implement "Edit Task" functionality. This includes creating an "Edit Task" modal.
-    -   Implement "Delete Task" functionality. This should be accessible from the task view.
+    -   [DONE] Implement "Edit Task" functionality. This includes creating an "Edit Task" modal.
+    -   [DONE] Implement "Delete Task" functionality. This should be accessible from the task view.
     -   Implement subtask completion. The checkboxes in `viewTask.tsx` should be functional.
-    -   Implement moving tasks between columns. The dropdown in `viewTask.tsx` should be functional.
-2.  **Drag and Drop:** Implement drag-and-drop for tasks between columns on the main board view. This is a key feature for a Kanban board.
+    -   [DONE] Implement moving tasks between columns. The dropdown in `viewTask.tsx` should be functional.
+2.  [DONE] **Drag and Drop:** Implement drag-and-drop for tasks between columns on the main board view. This is a key feature for a Kanban board.
 
 **Medium Priority (UI/UX Improvements & Bug Fixes):**
 1.  **Form Validation:** Add validation to all forms (add/edit board, add/edit task) to handle empty inputs and other potential errors.

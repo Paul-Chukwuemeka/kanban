@@ -5,6 +5,7 @@ import { useState } from "react";
 import { FaPlus, FaXmark } from "react-icons/fa6";
 import { v4 as uuidv4 } from "uuid";
 import type { RootState } from "../../lib/redux/store";
+import { SubTask } from "@/types";
 
 interface Board {
   name: string;
@@ -14,7 +15,7 @@ interface Board {
     tasks: Array<{
       name: string;
       description: string;
-      subTasks: Array<{ name: string }>;
+      subTasks: SubTask[];
     }>;
   }[];
 }
@@ -30,7 +31,9 @@ const AddTaskModal = ({ onClose }: AddTaskModalProps) => {
   );
   const [taskName, setTaskName] = useState("");
   const [description, setDescription] = useState("");
-  const [subTasks, setSubTasks] = useState([{ name: "" }]);
+  const [subTasks, setSubTasks] = useState<SubTask[]>([
+    { name: "", id: uuidv4(), completed: false },
+  ]);
   const [status, setStatus] = useState<string | null>(
     currentBoard ? currentBoard.columns[0].name : null
   );
@@ -38,7 +41,7 @@ const AddTaskModal = ({ onClose }: AddTaskModalProps) => {
     name: string;
     description: string;
     id: string;
-    subTasks: { name: string }[];
+    subTasks: SubTask[];
   }>({
     name: "",
     description: "",
@@ -51,7 +54,13 @@ const AddTaskModal = ({ onClose }: AddTaskModalProps) => {
       name: taskName,
       description,
       id: uuidv4(),
-      subTasks: subTasks.filter((subtask) => subtask.name !== ""),
+      subTasks: subTasks
+        .filter((subtask) => subtask.name !== "")
+        .map((subtask) => ({
+          ...subtask,
+          id: subtask.id || uuidv4(),
+          completed: subtask.completed || false,
+        })),
     });
   }, [description, subTasks, taskName]);
 
@@ -117,11 +126,17 @@ const AddTaskModal = ({ onClose }: AddTaskModalProps) => {
                   type="text"
                   className="border border-[#7C8CA4] focus:outline-none flex-1 p-3 rounded-md"
                   onInput={(e) => {
-                    const newSubTasksArray = subTasks.map((subtask, i) => {
-                      return i == index
-                        ? { name: e.currentTarget.value }
-                        : subtask;
-                    });
+                    const newSubTasksArray = subTasks.map(
+                      (subtask, i: number) => {
+                        return i == index
+                          ? {
+                              name: e.currentTarget.value,
+                              id: subtask.id,
+                              completed: subtask.completed || false,
+                            }
+                          : subtask;
+                      }
+                    );
                     setSubTasks(newSubTasksArray);
                   }}
                 />
@@ -140,7 +155,10 @@ const AddTaskModal = ({ onClose }: AddTaskModalProps) => {
         <button
           className="flex items-center self-center gap-2 bg-[#7247ce] font-semibold text-white p-3 rounded-full hover:bg-[#5a34a0] transition-colors duration-200 cursor-pointer w-full justify-center"
           onClick={() => {
-            const subTasksArr = [...subTasks, { name: "" }];
+            const subTasksArr = [
+              ...subTasks,
+              { name: "", id: uuidv4(), completed: false },
+            ];
             setSubTasks(subTasksArr);
           }}
         >

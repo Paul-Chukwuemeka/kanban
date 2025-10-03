@@ -2,7 +2,7 @@
 import Header from "../components/layout/header";
 import Sidebar from "../components/layout/sideBar";
 import { useSelector, useDispatch } from "react-redux";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import type { RootState } from "../lib/redux/store";
 import ToggleSidebarBtn from "../components/ui/sidebarBtn";
 import AddTaskModal from "../components/features/add_task_modal";

@@ -18,6 +18,8 @@ const ViewTask = ({
   setIsEditTaskModalOpen,
   setIsDeleteTaskModalOpen,
 }: ViewTaskProps) => {
+  const darkMode = useSelector((state: RootState) => state.theme.value);
+
   const [isOptionsOpen, setIsOptionsOpen] = useState(false);
   const [currentStatus, setCurrentStatus] = useState<string | null>(null);
   const [subTasks, setSubTasks] = useState<SubTask[]>([]);
@@ -80,12 +82,12 @@ const ViewTask = ({
       onClick={onClose}
     >
       <div
-        className="bg-white w-full max-w-[480px] h-fit rounded-lg p-8 flex flex-col gap-3"
-        onClick={(e) => {
+            className={`w-full max-w-[480px] h-fit rounded-lg p-8 flex flex-col gap-3 ${darkMode ? "bg-[#2C2A37] text-white" : "bg-white text-black"}`}
+            onClick={(e) => {
           e.stopPropagation();
         }}
       >
-        <div className="flex items-center text-[#7247ce] justify-between text-lg gap-3">
+        <div className={`flex items-center ${darkMode ? "text-white" : "text-black"} justify-between text-lg gap-3`}>
           <h2 className="flex-1 font-bold capitalize">{currentTask.name}</h2>
           <button
             className="cursor-pointer relative"
@@ -134,7 +136,7 @@ const ViewTask = ({
               currentTask.description.slice(1)}
           </p>
         )}
-        <p className=" text-[#7247ceba] text-md font-semibold">
+        <p className=" text-md font-semibold">
           Subtasks ({completedSubtasks} of {currentTask.subTasks.length})
         </p>
         <div className="text-[#7C8CA4] text-sm font-medium">

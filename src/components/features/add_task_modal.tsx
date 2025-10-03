@@ -25,6 +25,8 @@ type AddTaskModalProps = {
 };
 
 const AddTaskModal = ({ onClose }: AddTaskModalProps) => {
+  const darkMode = useSelector((state: RootState) => state.theme.value);
+
   const dispatch = useDispatch();
   const currentBoard = useSelector((state: RootState) =>
     state.currentBoard.value ? (state.currentBoard.value as Board) : null
@@ -90,16 +92,21 @@ const AddTaskModal = ({ onClose }: AddTaskModalProps) => {
       className="bg-[#00000052] w-full flex justify-center items-center h-full absolute top-0 left-0 z-[100]"
       onClick={onClose}
     >
-      <div
-        className="bg-white w-full max-w-[450px] h-fit min-h-[500px] rounded-lg p-8 flex flex-col ite gap-5"
+      <form
+        className={`w-full max-w-[450px] h-fit min-h-[500px] rounded-lg p-8 flex flex-col ite gap-5 ${darkMode ? "bg-[#2C2A37] text-white" : "bg-white text-black"}`}
         onClick={(e) => {
           e.stopPropagation();
+        }}
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleAddTask();
         }}
       >
         <h1 className="text-xl font-bold">Add New Task</h1>
         <div>
           <p className="text-lg font-medium text-[#7C8CA4]">Task Name</p>
           <input
+            required
             type="text"
             placeholder="e.g Take coffee break"
             className="w-full border border-[#7C8CA4] rounded-md p-3 px-4 focus:outline-none"
@@ -123,6 +130,7 @@ const AddTaskModal = ({ onClose }: AddTaskModalProps) => {
             return (
               <div key={index} className="flex items-center gap-2">
                 <input
+                  required
                   type="text"
                   className="border border-[#7C8CA4] focus:outline-none flex-1 p-3 rounded-md"
                   onInput={(e) => {
@@ -161,6 +169,7 @@ const AddTaskModal = ({ onClose }: AddTaskModalProps) => {
             ];
             setSubTasks(subTasksArr);
           }}
+          type="button"
         >
           <FaPlus /> Add New Subtask
         </button>
@@ -179,20 +188,19 @@ const AddTaskModal = ({ onClose }: AddTaskModalProps) => {
               currentBoard.columns.map((column, index: number) => {
                 if (column)
                   return (
-                    <option value={column.name} key={index}>
+                    <option value={column.name} key={index} 
+                    className={darkMode ? "bg-[#2C2A37] text-white" : "bg-white text-black"}
+                    >
                       {column.name}
                     </option>
                   );
               })}
           </select>
         </div>
-        <button
-          className="w-full bg-[#7247ce] text-white p-3 font-semibold rounded-full hover:bg-[#5a34a0] transition-colors duration-200 cursor-pointer"
-          onClick={handleAddTask}
-        >
+        <button className="w-full bg-[#7247ce] text-white p-3 font-semibold rounded-full hover:bg-[#5a34a0] transition-colors duration-200 cursor-pointer">
           Create Task
         </button>
-      </div>
+      </form>
     </div>
   );
 };

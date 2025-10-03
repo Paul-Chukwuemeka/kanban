@@ -124,7 +124,7 @@ export default function Home() {
                         return (
                           <div
                             key={index}
-                            className="w-full cursor-grab shadow-lg rounded-lg bg-white p-5 flex gap-1.5 flex-col"
+                            className={`${darkMode ? "bg-[#2C2A37] text-white" : "bg-white text-black"} w-full cursor-grab shadow-lg rounded-lg p-5 flex gap-1.5 flex-col`}
                             onClick={() => {
                               dispatch(setCurrentTask(task));
                               setViewTaskOpen(true);

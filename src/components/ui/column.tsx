@@ -16,15 +16,16 @@ type Props = {
 const ColumnComponent = ({ column, handleDrop, setDragOriginColumnId, setDraggedItem, tasks, setViewTaskOpen }: Props) => {
   return (
     <div
-      className="w-[280px]"
+      className="w-[280px] max-md:w-[190px]"
       onDragOver={(e) => {
         e.preventDefault();
       }}
       onDrop={() => {
         handleDrop(column.id);
       }}
+
     >
-      <h1 className="font-semibold text-md capitalize text-[#7C8CA4] tracking-widest flex gap-1 pb-3">
+      <h1 className="font-semibold  text-md capitalize text-[#7C8CA4] tracking-widest flex gap-1 pb-3">
         {column && column.name}
         <span>({tasks ? tasks.length : 0})</span>
       </h1>

@@ -36,22 +36,22 @@ const Header = ({
 
   return (
     <header
-      className={`flex p-5 relative font-semibold  ${
+      className={`flex p-5 relative font-semibold  max-md:px-2 ${
         darkMode ? "bg-[#2C2A37] text-white" : "bg-white"
       }`}
     >
-      <div className="flex items-center gap-1 w-64 spa">
-        <PiKanbanFill className="text-[#7247ce] text-4xl" />
-        <h1 className="text-3xl font-bold tracking-tighter">kanban</h1>
+      <div className="flex items-center gap-1 mr-14 max-md:flex-1 max-md:mr-0">
+        <PiKanbanFill className="text-[rgb(114,71,206)] text-4xl max-md:text-2xl" />
+        <h1 className="text-3xl max-md:text-xl font-bold tracking-tighter">kanban</h1>
       </div>
-      <div className="flex items-center flex-1 justify-between">
-        <h1 className="text-[22px] capitalize">
+      <div className="flex items-center flex-1 justify-between max-md:justify-end">
+        <h1 className="text-[22px] max-md:text-sm max-md:hidden capitalize">
           {currentBoard ? currentBoard.name : "No Board Selected"}
         </h1>
         {currentBoard && (
-          <div className="flex gap-3">
+          <div className="flex gap-3 ">
             <button
-              className="flex items-center gap-1 text-white p-4 py-2.5 cursor-pointer rounded-3xl bg-[#7247ce]"
+              className="flex items-center text-md max-md:text-sm max-sm:text-xs gap-1 text-white p-4 py-2.5 cursor-pointer rounded-full bg-[#7247ce]"
               onClick={() => {
                 setAddTaskModalOpen(true);
               }}
@@ -60,7 +60,7 @@ const Header = ({
               Add New Task
             </button>
             <button
-              className="text-xl cursor-pointer"
+              className="text-xl max-md:text-sm max-sm:text-xs cursor-pointer"
               onClick={() => {
                 setShowOptions((isOptions) => !isOptions);
               }}
@@ -103,3 +103,4 @@ const Header = ({
 };
 
 export default Header;
+ 

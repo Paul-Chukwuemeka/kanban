@@ -174,13 +174,13 @@ export default function Home() {
                 );
               })}
               <div
-                className="w-[200px] bg-[#7c8ca440] cursor-pointer text-[#7247ce] rounded-lg flex gap-2 justify-center items-center"
+                className="w-[200px] max-md:w-[170px] bg-[#7c8ca440] cursor-pointer text-[#7247ce] rounded-lg flex gap-2 justify-center items-center"
                 onClick={() => {
                   setEditBoardModalOpen(true);
                 }}
               >
                 <FaPlus />
-                <h2 className="text-xl font-semibold">New Column</h2>
+                <h2 className="text-xl max-md:text-md max-md:font-medium font-semibold">New Column</h2>
               </div>
             </div>
           ) : (

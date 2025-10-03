@@ -34,10 +34,10 @@ const Sidebar = ({setAddBoardModalOpen}: SidebarProps) => {
     <div
       className={`${darkMode ? "bg-[#2C2A37]" : "bg-white"} ${
         isSidebarOpen ? "flex" : "hidden"
-      }  w-fit min-w-65 h-full max-md:hidden pb-10 flex-col justify-between `}
+      }  w-fit md:min-w-65 max-md:w-55 h-full pb-10 flex-col justify-between `}
     >
       <div className=" gap-6 py-6 flex flex-col">
-        <h3 className="px-5 font-semibold text-sm text-[#7C8CA4] uppercase">
+        <h3 className="px-5 font-semibold max-md:font-semibold text-sm max-md:text-xs text-[#7C8CA4] uppercase">
           All Boards ( <span>{boards.length}</span> )
         </h3>
         <ul className="w-full flex flex-col pr-6">
@@ -45,7 +45,7 @@ const Sidebar = ({setAddBoardModalOpen}: SidebarProps) => {
             const isActive = currentBoard && board.name == currentBoard.name;
             return (
               <li
-                className={`py-3  text-[#7C8CA4] flex capitalize gap-2 items-center text-md w-full hover:duration-250 hover:text-[#7247ce] rounded-[0px_40px_40px_0] board px-5 cursor-pointer ${
+                className={`py-3  text-[#7C8CA4] flex capitalize gap-2 items-center text-md max-md:text-sm w-full hover:duration-250 hover:text-[#7247ce] rounded-[0px_40px_40px_0] board px-5 cursor-pointer ${
                   darkMode ? "hover:bg-white " : "hover:bg-[#ded8ec6b]"
                 } ${isActive ? "bg-[#7247ce] text-white" : ""}`}
                 onClick={() => {
@@ -53,21 +53,21 @@ const Sidebar = ({setAddBoardModalOpen}: SidebarProps) => {
                 }}
                 key={board.id}
               >
-                <HiOutlineViewBoards className="text-xl" />
+                <HiOutlineViewBoards className="text-xl max-md:text-lg" />
                 {board.name}
               </li>
             );
           })}
 
           <li
-            className={`py-4  text-[#7247ce] flex gap-2 items-center text-sm w-full hover:duration-250 hover:text-[#7247ce] rounded-[0px_40px_40px_0] board px-5 cursor-pointer ${
+            className={`py-4  text-[#7247ce] flex gap-2 items-center text-sm max-md:font-medium w-full hover:duration-250 hover:text-[#7247ce] rounded-[0px_40px_40px_0] board px-5 cursor-pointer ${
               darkMode ? "hover:bg-white " : "hover:bg-[#ded8ec6b]"
             }`}
             onClick={() => {
               setAddBoardModalOpen(true);
             }}
           >
-            <HiOutlineViewBoards className="text-xl" />{" "}
+            <HiOutlineViewBoards className="text-xl max-md:text-lg" />{" "}
             <span className="flex items-center gap-1">
               <FaPlus /> Add New Board
             </span>

@@ -155,45 +155,52 @@ export default function Home() {
       <main className="relative flex-1 flex ">
         <Sidebar setAddBoardModalOpen={setAddBoardModalOpen} />
         <ToggleSidebarBtn />
-        <div className=" hide-scroll flex-1 flex overflow-scroll p-4 ">
-          {currentBoard ? (
-            <div className="flex p-4 gap-10">
-              {columns?.map((column: Column, index: number) => {
-                const tasks = column?.tasks;
-                return (
-                  <ColumnComponent
-                    key={index}
-                    column={column}
-                    tasks={tasks}
-                    setDraggedItem={setDraggedItem}
-                    setDragOriginColumnId={setDragOriginColumnId}
-                    handleDrop={handleDrop}
-                    setViewTaskOpen={setViewTaskOpen}
-                    darkMode={darkMode}
-                  />
-                );
-              })}
-              <div
-                className="w-[200px] max-md:w-[170px] bg-[#7c8ca440] cursor-pointer text-[#7247ce] rounded-lg flex gap-2 justify-center items-center"
-                onClick={() => {
-                  setEditBoardModalOpen(true);
-                }}
-              >
-                <FaPlus />
-                <h2 className="text-xl max-md:text-md max-md:font-medium font-semibold">New Column</h2>
+        <div className="hide-scroll flex-1 flex flex-col overflow-scroll">
+          <h2 className="md:hidden text-lg font-semibold capitalize py-1 px-6 border-b">{currentBoard && currentBoard.name} Board</h2>
+          <div className=" flex p-4 py-1 flex-1 ">
+            {currentBoard ? (
+              <div className="flex p-4 gap-10  ">
+                {columns?.map((column: Column, index: number) => {
+                  const tasks = column?.tasks;
+                  return (
+                    <ColumnComponent
+                      key={index}
+                      column={column}
+                      tasks={tasks}
+                      setDraggedItem={setDraggedItem}
+                      setDragOriginColumnId={setDragOriginColumnId}
+                      handleDrop={handleDrop}
+                      setViewTaskOpen={setViewTaskOpen}
+                      darkMode={darkMode}
+                    />
+                  );
+                })}
+                <button
+                  className="w-[200px] max-md:w-[170px] bg-[#7c8ca440] cursor-pointer text-[#7247ce] rounded-lg flex gap-2 justify-center items-center"
+                  onClick={() => {
+                    setEditBoardModalOpen(true);
+                  }}
+                >
+                  <FaPlus />
+                  <h2 className="text-xl max-md:text-md max-md:font-medium font-semibold">
+                    New Column
+                  </h2>
+                </button>
               </div>
-            </div>
-          ) : (
-            <div className="p-4 text-gray-500 flex-1 flex items-center justify-center flex-col text-lg gap-2">
-              <p>No boards available. Please create a board to get started.</p>
-              <button
-                className="mt-2 text-lg px-4 py-4 bg-[#7247ce] text-white rounded-full hover:bg-blue-600 flex items-center gap-2"
-                onClick={() => setAddBoardModalOpen(true)}
-              >
-                <FaPlus /> Create New Board
-              </button>
-            </div>
-          )}
+            ) : (
+              <div className="p-4 text-gray-500 flex-1 flex items-center justify-center flex-col text-lg gap-2">
+                <p>
+                  No boards available. Please create a board to get started.
+                </p>
+                <button
+                  className="mt-2 text-lg px-4 py-4 bg-[#7247ce] text-white rounded-full hover:bg-blue-600 flex items-center gap-2"
+                  onClick={() => setAddBoardModalOpen(true)}
+                >
+                  <FaPlus /> Create New Board
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </main>
     </div>

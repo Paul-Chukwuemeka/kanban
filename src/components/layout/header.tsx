@@ -62,13 +62,12 @@ const Header = ({setEditBoardModalOpen,setDeleteBoardModalOpen,setAddTaskModalOp
               }}
             >
               <BsThreeDotsVertical />
-            </button>
             {showOptions && (
-              <div className="bg-white text-md z-[100] p-4 rounded-md flex flex-col items-start gap-1 shadow-[0px_1px_2px_#7C8CA4] absolute top-full right-5">
+              <div className={`text-sm z-[100] p-4 rounded-md flex flex-col items-start gap-1  absolute top-full right-5 ${darkMode ? "bg-[#2C2A37] text-white shadow-[0_0_5px_2px] shadow-gray-600/50" : "bg-white text-black shadow-[0px_1px_2px_#7C8CA4]"}`}>
                 <button
-                  className="font-normal text-[#7C8CA4] cursor-pointer "
+                  className="font-normal cursor-pointer "
                   onClick={() => {
-                    setShowOptions((isOptions) => !isOptions);
+                    setShowOptions(false);
                     setEditBoardModalOpen(true)
                   }}
                 >
@@ -77,7 +76,7 @@ const Header = ({setEditBoardModalOpen,setDeleteBoardModalOpen,setAddTaskModalOp
                 <button
                   className="font-normal cursor-pointer text-red-500 "
                   onClick={() => {
-                    setShowOptions((isOptions) => !isOptions);
+                    setShowOptions(false);
                     setDeleteBoardModalOpen(true)
                   }}
                 >
@@ -85,6 +84,7 @@ const Header = ({setEditBoardModalOpen,setDeleteBoardModalOpen,setAddTaskModalOp
                 </button>
               </div>
             )}
+            </button>
           </div>
         )}
       </div>

@@ -106,9 +106,9 @@ const ViewTask = ({
               }}
             />
             {isOptionsOpen && (
-              <ul className="w-30 p-1  text-sm text-left rounded-sm bg-white shadow-[0_0_5px]  shadow-gray-300 absolute right-0 top-6">
+              <ul className={`w-30 p-1  text-sm text-left rounded-sm ${darkMode ? "bg-[#2C2A37] text-white shadow-[0_0_5px_2px] shadow-gray-600/50" : "bg-white text-black"} absolute right-0 top-6`}>
                 <li
-                  className="font-extralight hover:bg-purple-100 p-0.5 px-2 text-gray-500"
+                  className=" p-0.5 px-2"
                   onClick={(e) => {
                     e.stopPropagation();
                     onClose();
@@ -118,7 +118,7 @@ const ViewTask = ({
                   Edit Task
                 </li>
                 <li
-                  className="font-extralight hover:bg-purple-100 p-0.5 px-2 text-red-500"
+                  className=" p-0.5 px-2 text-red-500"
                   onClick={() => {
                     onClose();
                     setIsDeleteTaskModalOpen(true);

@@ -13,7 +13,11 @@ type HeaderProps = {
   setAddTaskModalOpen: (isOpen: boolean) => void;
 };
 
-const Header = ({setEditBoardModalOpen,setDeleteBoardModalOpen,setAddTaskModalOpen}: HeaderProps) => {
+const Header = ({
+  setEditBoardModalOpen,
+  setDeleteBoardModalOpen,
+  setAddTaskModalOpen,
+}: HeaderProps) => {
   const [showOptions, setShowOptions] = useState(false);
   const darkMode = useSelector((state: RootState) => state.theme.value);
   const currentBoard = useSelector(
@@ -62,13 +66,20 @@ const Header = ({setEditBoardModalOpen,setDeleteBoardModalOpen,setAddTaskModalOp
               }}
             >
               <BsThreeDotsVertical />
+            </button>
             {showOptions && (
-              <div className={`text-sm z-[100] p-4 rounded-md flex flex-col items-start gap-1  absolute top-full right-5 ${darkMode ? "bg-[#2C2A37] text-white shadow-[0_0_5px_2px] shadow-gray-600/50" : "bg-white text-black shadow-[0px_1px_2px_#7C8CA4]"}`}>
+              <div
+                className={`text-sm z-[100] p-4 rounded-md flex flex-col items-start gap-1  absolute top-full right-5 ${
+                  darkMode
+                    ? "bg-[#2C2A37] text-white shadow-[0_0_5px_2px] shadow-gray-600/50"
+                    : "bg-white text-black shadow-[0px_1px_2px_#7C8CA4]"
+                }`}
+              >
                 <button
                   className="font-normal cursor-pointer "
                   onClick={() => {
                     setShowOptions(false);
-                    setEditBoardModalOpen(true)
+                    setEditBoardModalOpen(true);
                   }}
                 >
                   Edit board
@@ -77,14 +88,13 @@ const Header = ({setEditBoardModalOpen,setDeleteBoardModalOpen,setAddTaskModalOp
                   className="font-normal cursor-pointer text-red-500 "
                   onClick={() => {
                     setShowOptions(false);
-                    setDeleteBoardModalOpen(true)
+                    setDeleteBoardModalOpen(true);
                   }}
                 >
                   Delete board
                 </button>
               </div>
             )}
-            </button>
           </div>
         )}
       </div>

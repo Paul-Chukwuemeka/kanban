@@ -38,7 +38,6 @@ const ViewTask = ({
     setCompletedSubtasks(
       subTasks.filter((subtask) => subtask.completed).length
     );
-    console.log(subTasks);
   }, [subTasks]);
 
   useEffect(() => {

@@ -17,6 +17,7 @@ import EditTaskModal from "@/components/features/edit_Task_Modal";
 import DeleteTaskModal from "@/components/features/delete_task_modal";
 import { moveTask } from "@/helper/updateTasks";
 import { updateBoard } from "@/lib/redux/slices/boardsSlice";
+import { ToastContainer, toast } from "react-toastify";
 
 export default function Home() {
   const darkMode = useSelector((state: RootState) => state.theme.value);
@@ -40,23 +41,54 @@ export default function Home() {
   const columns = currentBoard ? currentBoard.columns : [];
 
   const handleDrop = (destinationColumnId: string) => {
-    if (draggedItem && dragOriginColumnId && currentBoard) {
-      if (dragOriginColumnId !== destinationColumnId) {
-        const updatedBoard = moveTask(
-          boards,
-          currentBoard.id,
-          draggedItem.id,
-          dragOriginColumnId,
-          destinationColumnId
-        );
-        if (updatedBoard) {
-          dispatch(updateBoard(updatedBoard));
+    try {
+      if (draggedItem && dragOriginColumnId && currentBoard) {
+        if (dragOriginColumnId !== destinationColumnId) {
+          const updatedBoard = moveTask(
+            boards,
+            currentBoard.id,
+            draggedItem.id,
+            dragOriginColumnId,
+            destinationColumnId
+          );
+          if (updatedBoard) {
+            dispatch(updateBoard(updatedBoard));
+          }
         }
       }
+    } catch (error) {
+      console.error("Error moving task:", error);
+      toast.error("Failed to move task. Please try again.");
     }
     setDraggedItem(null);
     setDragOriginColumnId(null);
   };
+
+  function notifySuccess(message: string) {
+    toast.success(message, {
+      position: "top-right",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
+  }
+
+  function notifyError(message: string) {
+    toast.error(message, {
+      position: "top-right",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
+  }
 
   return (
     <div
@@ -64,24 +96,49 @@ export default function Home() {
         darkMode && "bg-[#211F2C]"
       }`}
     >
+      <ToastContainer />
       {isDeleteTaskModalOpen && (
-        <DeleteTaskModal onClose={() => setDeleteTaskModalOpen(false)} />
+        <DeleteTaskModal
+          onClose={() => setDeleteTaskModalOpen(false)}
+          notifySuccess={notifySuccess}
+          notifyError={notifyError}
+        />
       )}
       {isEditTaskModalOpen && (
-        <EditTaskModal onClose={() => setEditTaskModalOpen(false)} />
+        <EditTaskModal
+          onClose={() => setEditTaskModalOpen(false)}
+          notifySuccess={notifySuccess}
+          notifyError={notifyError}
+        />
       )}
 
       {isAddTaskModalOpen && (
-        <AddTaskModal onClose={() => setAddTaskModalOpen(false)} />
+        <AddTaskModal
+          onClose={() => setAddTaskModalOpen(false)}
+          notifySuccess={notifySuccess}
+          notifyError={notifyError}
+        />
       )}
       {isAddBoardModalOpen && (
-        <AddBoardModal onClose={() => setAddBoardModalOpen(false)} />
+        <AddBoardModal
+          onClose={() => setAddBoardModalOpen(false)}
+          notifySuccess={notifySuccess}
+          notifyError={notifyError}
+        />
       )}
       {isEditBoardModalOpen && (
-        <EditBoardModal onClose={() => setEditBoardModalOpen(false)} />
+        <EditBoardModal
+          onClose={() => setEditBoardModalOpen(false)}
+          notifySuccess={notifySuccess}
+          notifyError={notifyError}
+        />
       )}
       {isDeleteModal && (
-        <Deleteboardmodal onClose={() => setDeleteModalOpen(false)} />
+        <Deleteboardmodal
+          onClose={() => setDeleteModalOpen(false)}
+          notifySuccess={notifySuccess}
+          notifyError={notifyError}
+        />
       )}
       {isViewTask && (
         <ViewTask
@@ -124,7 +181,11 @@ export default function Home() {
                         return (
                           <div
                             key={index}
-                            className={`${darkMode ? "bg-[#2C2A37] text-white" : "bg-white text-black"} w-full cursor-grab shadow-lg rounded-lg p-5 flex gap-1.5 flex-col`}
+                            className={`${
+                              darkMode
+                                ? "bg-[#2C2A37] text-white"
+                                : "bg-white text-black"
+                            } w-full cursor-grab shadow-lg rounded-lg p-5 flex gap-1.5 flex-col`}
                             onClick={() => {
                               dispatch(setCurrentTask(task));
                               setViewTaskOpen(true);

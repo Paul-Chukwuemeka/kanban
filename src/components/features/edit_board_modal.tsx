@@ -13,15 +13,17 @@ interface Board {
 
 type EditBoardModalProps = {
   onClose: () => void;
+  notifySuccess: (msg: string) => void;
+  notifyError: (msg: string) => void;
 };
 
-const EditBoardModal = ({ onClose }: EditBoardModalProps) => {
+const EditBoardModal = ({
+  onClose,
+  notifySuccess,
+  notifyError,
+}: EditBoardModalProps) => {
   const dispatch = useDispatch();
 
-  const [error, setError] = useState({
-    isError: false,
-    reason: "",
-  });
   const currentBoard = useSelector(
     (state: RootState) => state.currentBoard.value as Board | null
   );
@@ -46,34 +48,29 @@ const EditBoardModal = ({ onClose }: EditBoardModalProps) => {
   }, [boardName, columns, currentBoard]);
 
   function handleUpdate() {
-    const colNames = board.columns.map((col) => col.name.trim().toLowerCase());
-    const uniqueColNames = new Set(colNames);
-    if (colNames.length !== uniqueColNames.size) {
-      setError({
-        isError: true,
-        reason: "Column names must be unique",
-      });
-      return;
+    try {
+      const colNames = board.columns.map((col) =>
+        col.name.trim().toLowerCase()
+      );
+      const uniqueColNames = new Set(colNames);
+      if (colNames.length !== uniqueColNames.size) {
+        throw new Error("Column names must be unique");
+      }
+      if (board.name.trim() === "") {
+        throw new Error("Board name is required");
+      }
+      if (
+        board.columns.length === 0 ||
+        board.columns.some((col) => col.name.trim() === "")
+      ) {
+        throw new Error("All columns must have a name");
+      }
+      dispatch(updateBoard(board));
+      notifySuccess("Board updated successfully!");
+    } catch (error) {
+      console.error("Error updating board:", error);
+      notifyError("Failed to update board. Please try again.");
     }
-    if (board.name.trim() === "") {
-      setError({
-        isError: true,
-        reason: "Board name is required",
-      });
-      return;
-    }
-    if (
-      board.columns.length === 0 ||
-      board.columns.some((col) => col.name.trim() === "")
-    ) {
-      setError({
-        isError: true,
-        reason: "All columns must have a name",
-      });
-      return;
-    }
-    // If all checks pass, update board
-    dispatch(updateBoard(board));
   }
 
   return (
@@ -161,9 +158,6 @@ const EditBoardModal = ({ onClose }: EditBoardModalProps) => {
         <button className="w-full bg-[#7247ce] text-white p-3 font-semibold rounded-full hover:bg-[#5a34a0] transition-colors duration-200 cursor-pointer">
           Save Changes
         </button>
-        {error.isError && (
-          <p className="text-red-500 text-lg text-center p-2">{error.reason}</p>
-        )}
       </form>
     </div>
   );

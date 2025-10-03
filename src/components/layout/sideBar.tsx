@@ -34,7 +34,7 @@ const Sidebar = ({setAddBoardModalOpen}: SidebarProps) => {
     <div
       className={`${darkMode ? "bg-[#2C2A37]" : "bg-white"} ${
         isSidebarOpen ? "flex" : "hidden"
-      }  w-fit min-w-65 h-full  flex-col justify-between `}
+      }  w-fit min-w-65 h-screen  flex-col justify-between `}
     >
       <div className=" gap-6 py-6 flex flex-col">
         <h3 className="px-5 font-semibold text-sm text-[#7C8CA4] uppercase">

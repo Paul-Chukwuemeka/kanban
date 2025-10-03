@@ -5,9 +5,15 @@ import { Board } from "@/types";
 
 type DeleteboardmodalProps = {
   onClose: () => void;
+  notifySuccess: (msg: string) => void;
+  notifyError: (msg: string) => void;
 };
 
-const Deleteboardmodal = ({ onClose }: DeleteboardmodalProps) => {
+const Deleteboardmodal = ({
+  onClose,
+  notifySuccess,
+  notifyError,
+}: DeleteboardmodalProps) => {
   const currentBoard = useSelector(
     (state: RootState) => state.currentBoard.value
   ) as Board | null;
@@ -47,7 +53,13 @@ const Deleteboardmodal = ({ onClose }: DeleteboardmodalProps) => {
           <button
             className={`w-1/2  bg-red-500 text-white cursor-pointer p-3 py-2 rounded-full`}
             onClick={() => {
-              dispatch(deleteBoard(currentBoard && currentBoard.id));
+              try {
+                dispatch(deleteBoard(currentBoard && currentBoard.id));
+                notifySuccess("Board deleted successfully!");
+              } catch (error) {
+                notifyError("Failed to delete board. Please try again.");
+                console.error("Error deleting board:", error);
+              }
               onClose();
             }}
           >

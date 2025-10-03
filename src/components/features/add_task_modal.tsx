@@ -22,9 +22,15 @@ interface Board {
 
 type AddTaskModalProps = {
   onClose: () => void;
+  notifySuccess: (msg: string) => void;
+  notifyError: (msg: string) => void;
 };
 
-const AddTaskModal = ({ onClose }: AddTaskModalProps) => {
+const AddTaskModal = ({
+  onClose,
+  notifySuccess,
+  notifyError,
+}: AddTaskModalProps) => {
   const darkMode = useSelector((state: RootState) => state.theme.value);
 
   const dispatch = useDispatch();
@@ -67,24 +73,30 @@ const AddTaskModal = ({ onClose }: AddTaskModalProps) => {
   }, [description, subTasks, taskName]);
 
   function handleAddTask() {
-    if (!currentBoard) {
-      return;
-    }
+    try {
+      if (!currentBoard) {
+        return;
+      }
 
-    const updatedBoard: Board = {
-      ...(currentBoard as Board),
-      columns: (currentBoard as Board).columns.map((col) => {
-        if (col && col.name === status) {
-          return {
-            ...col,
-            tasks: [...(col.tasks || []), task],
-          };
-        }
-        return col;
-      }),
-    };
-    dispatch(updateBoard(updatedBoard));
-    onClose();
+      const updatedBoard: Board = {
+        ...(currentBoard as Board),
+        columns: (currentBoard as Board).columns.map((col) => {
+          if (col && col.name === status) {
+            return {
+              ...col,
+              tasks: [...(col.tasks || []), task],
+            };
+          }
+          return col;
+        }),
+      };
+      notifySuccess("Task added successfully");
+      dispatch(updateBoard(updatedBoard));
+      onClose();
+    } catch (error) {
+      console.error("Error adding task:", error);
+      notifyError("Failed to add task. Please try again.");
+    }
   }
 
   return (
@@ -93,7 +105,9 @@ const AddTaskModal = ({ onClose }: AddTaskModalProps) => {
       onClick={onClose}
     >
       <form
-        className={`w-full max-w-[450px] h-fit min-h-[500px] rounded-lg p-8 flex flex-col ite gap-5 ${darkMode ? "bg-[#2C2A37] text-white" : "bg-white text-black"}`}
+        className={`w-full max-w-[450px] h-fit min-h-[500px] rounded-lg p-8 flex flex-col ite gap-5 ${
+          darkMode ? "bg-[#2C2A37] text-white" : "bg-white text-black"
+        }`}
         onClick={(e) => {
           e.stopPropagation();
         }}
@@ -188,8 +202,14 @@ const AddTaskModal = ({ onClose }: AddTaskModalProps) => {
               currentBoard.columns.map((column, index: number) => {
                 if (column)
                   return (
-                    <option value={column.name} key={index} 
-                    className={darkMode ? "bg-[#2C2A37] text-white" : "bg-white text-black"}
+                    <option
+                      value={column.name}
+                      key={index}
+                      className={
+                        darkMode
+                          ? "bg-[#2C2A37] text-white"
+                          : "bg-white text-black"
+                      }
                     >
                       {column.name}
                     </option>

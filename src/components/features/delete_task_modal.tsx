@@ -6,9 +6,11 @@ import { Board } from "@/types";
 
 type DeleteTaskModalProps = {
   onClose: () => void;
+  notifySuccess: (msg: string) => void;
+  notifyError: (msg: string) => void;
 };
 
-const DeleteTaskModal = ({ onClose }: DeleteTaskModalProps) => {
+const DeleteTaskModal = ({ onClose, notifySuccess, notifyError }: DeleteTaskModalProps) => {
   const darkMode = useSelector((state: RootState) => state.theme.value);
   const dispatch = useDispatch();
   const currentBoard = useSelector(
@@ -19,7 +21,8 @@ const DeleteTaskModal = ({ onClose }: DeleteTaskModalProps) => {
   );
 
   function handleDeleteTask() {
-    const newColumns = (currentBoard as Board).columns.map((column) => {
+   try {
+     const newColumns = (currentBoard as Board).columns.map((column) => {
       return {
         ...column,
         tasks: column.tasks?.filter((task) => task.id !== currentTask?.id),
@@ -29,8 +32,13 @@ const DeleteTaskModal = ({ onClose }: DeleteTaskModalProps) => {
       ...(currentBoard as Board),
       columns: newColumns,
     };
+    notifySuccess("Task deleted successfully");
     dispatch(updateBoard(newBoard));
     onClose();
+   } catch (error) {
+     console.error("Error deleting task:", error);
+     notifyError("Failed to delete task. Please try again.");
+   }
   }
   return (
     <div

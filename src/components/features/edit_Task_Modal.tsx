@@ -7,9 +7,15 @@ import { updateBoard } from "@/lib/redux/slices/boardsSlice";
 
 type EditTaskModalProps = {
   onClose: () => void;
+  notifySuccess: (msg: string) => void;
+  notifyError: (msg: string) => void;
 };
 
-const EditTaskModal = ({ onClose }: EditTaskModalProps) => {
+const EditTaskModal = ({
+  onClose,
+  notifySuccess,
+  notifyError,
+}: EditTaskModalProps) => {
   const darkMode = useSelector((state: RootState) => state.theme.value);
 
   const [task, setTask] = useState<Task>({
@@ -33,19 +39,26 @@ const EditTaskModal = ({ onClose }: EditTaskModalProps) => {
   }, [currentTask]);
 
   function handleSave() {
-    const newColumns = (currentBoard as Board).columns.map((column) => {
-      return {
-        ...column,
-        tasks: column.tasks?.map((t) => (t.id === currentTask?.id ? task : t)),
+    try {
+      const newColumns = (currentBoard as Board).columns.map((column) => {
+        return {
+          ...column,
+          tasks: column.tasks?.map((t) =>
+            t.id === currentTask?.id ? task : t
+          ),
+        };
+      });
+      const newBoard = {
+        ...(currentBoard as Board),
+        columns: newColumns,
       };
-    });
-    const newBoard = {
-      ...(currentBoard as Board),
-      columns: newColumns,
-    };
-
-    dispatch(updateBoard(newBoard));
-    onClose();
+      notifySuccess("Task edited successfully");
+      dispatch(updateBoard(newBoard));
+      onClose();
+    } catch (error) {
+      console.error("Error editing task:", error);
+      notifyError("Failed to edit task. Please try again.");
+    }
   }
   function handleDeleteSubtask(subtaskId: string) {
     setTask({
@@ -54,14 +67,15 @@ const EditTaskModal = ({ onClose }: EditTaskModalProps) => {
     });
   }
 
-
   return (
     <div
       className="absolute w-full h-screen top-0 flex items-center justify-center left-0 z-10 bg-black/10"
       onClick={onClose}
     >
       <form
-        className={` w-full max-w-md h-fit *:w-full min-h-[300px] rounded-lg p-8 px-6 flex flex-col items-center gap-5 ${darkMode ? "bg-[#2C2A37] text-white" : "bg-gray-100 text-black"}`}
+        className={` w-full max-w-md h-fit *:w-full min-h-[300px] rounded-lg p-8 px-6 flex flex-col items-center gap-5 ${
+          darkMode ? "bg-[#2C2A37] text-white" : "bg-gray-100 text-black"
+        }`}
         onClick={(e) => {
           e.stopPropagation();
         }}
@@ -123,10 +137,11 @@ const EditTaskModal = ({ onClose }: EditTaskModalProps) => {
                     });
                   }}
                 />
-                <FaTimes className="text-gray-500 cursor-pointer" 
-                onClick={()=>{
-                  handleDeleteSubtask(subtask.id);
-                }}
+                <FaTimes
+                  className="text-gray-500 cursor-pointer"
+                  onClick={() => {
+                    handleDeleteSubtask(subtask.id);
+                  }}
                 />
               </div>
             ))}

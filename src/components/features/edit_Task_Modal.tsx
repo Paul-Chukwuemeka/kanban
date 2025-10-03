@@ -47,6 +47,13 @@ const EditTaskModal = ({ onClose }: EditTaskModalProps) => {
     dispatch(updateBoard(newBoard));
     onClose();
   }
+  function handleDeleteSubtask(subtaskId: string) {
+    setTask({
+      ...task,
+      subTasks: task.subTasks.filter((subtask) => subtask.id !== subtaskId),
+    });
+  }
+
 
   return (
     <div
@@ -116,7 +123,11 @@ const EditTaskModal = ({ onClose }: EditTaskModalProps) => {
                     });
                   }}
                 />
-                <FaTimes className="text-gray-500 cursor-pointer" />
+                <FaTimes className="text-gray-500 cursor-pointer" 
+                onClick={()=>{
+                  handleDeleteSubtask(subtask.id);
+                }}
+                />
               </div>
             ))}
         </div>

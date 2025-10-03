@@ -11,9 +11,9 @@
 **Medium Priority (UI/UX Improvements & Bug Fixes):**
 1.  [DONE] **Form Validation:** Add validation to all forms (add/edit board, add/edit task) to handle empty inputs and other potential errors.
 2.  **Subtask Management:**
-    -   Allow adding new subtasks to a task.
-    -   Allow editing existing subtasks.
-    -   Allow deleting subtasks.
+    -   [DONE] Allow adding new subtasks to a task.
+    -   [DONE] Allow editing existing subtasks.
+    -   [DONE] Allow deleting subtasks.
 3.  **UI Polish:**
     -   Provide feedback to the user after an action is performed (e.g., "Task created successfully").
     -   Improve empty states (e.g., for columns with no tasks).

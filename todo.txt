@@ -4,7 +4,8 @@
 1.  **Task Management:**
     -   [x] Implement "Edit Task" functionality. This includes creating an "Edit Task" modal.
     -   [x] Implement "Delete Task" functionality. This should be accessible from the task view.
-    -   [x] Implement subtask completion. The checkboxes in `viewTask.tsx` should be functional.
+    -   [x] Implement subtask completion. The che
+    ckboxes in `viewTask.tsx` should be functional.
     -   [x] Implement moving tasks between columns. The dropdown in `viewTask.tsx` should be functional.
 2.  [x] **Drag and Drop:** Implement drag-and-drop for tasks between columns on the main board view. This is a key feature for a Kanban board.
 
@@ -20,14 +21,15 @@
     -   [x] Ensure the UI is fully responsive for different screen sizes.
     -   [x] Fix the hardcoded `true` values in `viewTask.tsx` for subtask completion.
 4.  [x] Create a new component for the task card.
-5.  Implement a loading state for the board.
+5.  [x] Implement a loading state for the board.
 6.  [x]Add a confirmation modal before deleting a board.
 7.  [x]Add a confirmation modal before deleting a task.
 
 **Low Priority (Code Quality and Future Features):**
 1.  **Refactoring:**
     -   [x] Break down large components like `page.tsx` into smaller, more manageable components.
-    -   Improve TypeScript typings and remove any `any` types.
+    -   [x] Improve TypeScript typings and remove any `any` types.
+
 2.  **Testing:**
     -   Write unit tests for Redux slices and helper functions.
     -   Write component tests for the main components.

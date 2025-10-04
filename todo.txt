@@ -17,7 +17,7 @@
 3.  **UI Polish:**
     -  [x] Provide feedback to the user after an action is performed (e.g., "Task created successfully").
     -  [x] Improve empty states (e.g., for columns with no tasks).
-    -   Ensure the UI is fully responsive for different screen sizes.
+    -   [x] Ensure the UI is fully responsive for different screen sizes.
     -   [x] Fix the hardcoded `true` values in `viewTask.tsx` for subtask completion.
 4.  [x] Create a new component for the task card.
 5.  Implement a loading state for the board.

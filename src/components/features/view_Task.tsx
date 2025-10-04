@@ -34,22 +34,13 @@ const ViewTask = ({
   const boards = useSelector((state: RootState) => state.boards.value);
 
   useEffect(() => {
-    if (subTasks.length <= 0) return;
-    setCompletedSubtasks(
-      subTasks.filter((subtask) => subtask.completed).length
-    );
-  }, [subTasks]);
-
-  useEffect(() => {
     if (currentTask) {
       setSubTasks(currentTask.subTasks);
       setCompletedSubtasks(
         currentTask.subTasks.filter((subtask) => subtask.completed).length
       );
     }
-  }, [currentTask]);
 
-  useEffect(() => {
     if (currentBoard) {
       const current =
         currentBoard?.columns.find((col) =>
@@ -57,12 +48,17 @@ const ViewTask = ({
         )?.id || null;
       setCurrentStatus(current);
     }
-  }, [currentBoard, currentTask]);
+  }, [currentTask, currentBoard]);
+
+  useEffect(() => {
+    if (subTasks.length <= 0) return;
+    setCompletedSubtasks(
+      subTasks.filter((subtask) => subtask.completed).length
+    );
+  }, [subTasks]);
 
   function handleStateChange(id: string) {
-    if (!currentBoard) return;
-    if (!currentTask) return;
-    if (id === currentStatus) return;
+    if (!currentBoard || !currentTask || id === currentStatus) return;
     const updatedBoard = moveTask(
       boards,
       currentBoard.id,
@@ -97,19 +93,13 @@ const ViewTask = ({
           <button
             className="cursor-pointer relative"
             onClick={() => {
-              setIsOptionsOpen(true);
+              setIsOptionsOpen(!isOptionsOpen);
             }}
             onBlur={() => {
               setIsOptionsOpen(false);
             }}
           >
-            <BsThreeDotsVertical
-              className="text-xl"
-              onClick={(e) => {
-                e.stopPropagation();
-                setIsOptionsOpen(!isOptionsOpen);
-              }}
-            />
+            <BsThreeDotsVertical className="text-xl" />
             {isOptionsOpen && (
               <ul
                 className={`w-30 p-1  text-sm text-left shadow-[0_0_5px_2px]  rounded-sm ${
@@ -189,7 +179,9 @@ const ViewTask = ({
         <div className="w-full border border-[#47424282] rounded-lg pr-3">
           <select
             name="status"
-            className=" w-full  capitalize font-medium p-3  focus:outline-none"
+            className={`w-full capitalize font-medium p-3 focus:outline-none ${
+              darkMode ? "bg-[#2C2A37] text-white" : "bg-white text-black"
+            }`}
             value={currentStatus ? currentStatus : ""}
             onChange={(e) => {
               handleStateChange(e.target.value);

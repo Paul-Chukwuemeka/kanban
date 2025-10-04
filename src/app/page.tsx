@@ -188,18 +188,18 @@ export default function Home() {
                   }}
                 >
                   <FaPlus />
-                  <h2 className="text-xl max-md:text-md max-md:font-medium font-semibold">
+                  <h2 className="text-xl max-md:text-sm max-md:font-medium font-semibold">
                     New Column
                   </h2>
                 </button>
               </div>
             ) : (
-              <div className="p-4 text-gray-500 flex-1 flex items-center justify-center flex-col text-lg gap-2">
+              <div className="p-4 text-gray-500 flex-1 flex items-center justify-center flex-col max-md:text-sm text-lg gap-2">
                 <p>
                   No boards available. Please create a board to get started.
                 </p>
                 <button
-                  className="mt-2 text-lg px-4 py-4 bg-[#7247ce] text-white rounded-full hover:bg-blue-600 flex items-center gap-2"
+                  className="mt-2 text-lg max-md:text-sm px-4 py-4 bg-[#7247ce] text-white rounded-full hover:bg-blue-600 flex items-center gap-2"
                   onClick={() => setAddBoardModalOpen(true)}
                 >
                   <FaPlus /> Create New Board

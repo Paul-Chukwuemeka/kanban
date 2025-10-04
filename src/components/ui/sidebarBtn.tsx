@@ -11,7 +11,7 @@ const ToggleSidebarBtn = () => {
   return (
     <button
       title="Hide/show sidebar"
-      className={`bottom-[5vh] max-md:bottom-[0.5vh] rounded-tr-full max-md:w-fit rounded-br-full p-3 px-5 fixed left-0 flex items-center text-md max-md:text-sm gap-1  space-x-2 text-[#7C8CA4] cursor-pointer font-semibold  ${
+      className={`bottom-[5vh] max-md:bottom-[0.5vh] rounded-tr-full max-md:w-fit rounded-br-full p-3 px-5 fixed left-0 flex items-center text-md max-md:text-xs gap-1  space-x-2 text-[#7C8CA4] cursor-pointer font-semibold  ${
         darkMode ? "hover:bg-white" : "hover:bg-[#ded8ec6b] "
       } hover:text-[#7247ce] ${
         isSidebarOpen
@@ -23,10 +23,10 @@ const ToggleSidebarBtn = () => {
         dispatch(toggleSidebar());
       }}
     >
-      {isSidebarOpen && <FaEyeSlash className="text-xl max-md:text-lg" />}
-      {!isSidebarOpen && <FaEye className="text-xl max-md:text-lg" />}
+      {isSidebarOpen && <FaEyeSlash className="text-xl max-md:text-md" />}
+      {!isSidebarOpen && <FaEye className="text-xl max-md:text-md" />}
 
-      <span className={`${!isSidebarOpen && "hidden"} max-md:hidden`}>Hide Sidebar</span>
+      <span className={`${!isSidebarOpen && "hidden"} `}>Hide Sidebar</span>
     </button>
   );
 };

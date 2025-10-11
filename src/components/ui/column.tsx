@@ -45,6 +45,7 @@ const ColumnComponent = ({
       }}
       onDrop={() => {
         handleDrop(column.id);
+        setIsDragging(false);
       }}
     >
       <h1 className="font-semibold  text-md capitalize text-[#7C8CA4] tracking-widest flex gap-1 pb-3">

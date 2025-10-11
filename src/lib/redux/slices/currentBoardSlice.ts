@@ -6,13 +6,6 @@ const currentBoardSlice = createSlice({
   reducers: {
     setCurrentBoard: (state, action) => {
       state.value = action.payload;
-      if (typeof window !== "undefined") {
-        if (action.payload) {
-          localStorage.setItem("currentBoard", JSON.stringify(action.payload));
-        } else {
-          localStorage.removeItem("currentBoard");
-        }
-      }
     },
   },
 });

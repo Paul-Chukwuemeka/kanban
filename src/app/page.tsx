@@ -156,13 +156,6 @@ export default function Home() {
         <Sidebar setAddBoardModalOpen={setAddBoardModalOpen} />
         <ToggleSidebarBtn />
         <div className=" flex-1 flex flex-col overflow-hidden">
-          <h2
-            className={` ${
-              darkMode && "text-white"
-            } md:hidden text-lg font-semibold capitalize py-1 px-6 `}
-          >
-            {currentBoard && currentBoard.name} Board
-          </h2>
           <div className=" flex p-4 py-1 flex-1 overflow-auto hide-scroll ">
             {currentBoard ? (
               <div className="flex p-4 gap-10  ">

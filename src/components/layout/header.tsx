@@ -36,17 +36,19 @@ const Header = ({
 
   return (
     <header
-      className={`flex p-5 relative font-semibold  max-md:px-2 ${
+      className={`flex p-5  relative font-semibold  max-md:p-2 ${
         darkMode ? "bg-[#2C2A37] text-white" : "bg-white"
       }`}
     >
-      <div className="flex items-center gap-1 mr-14 max-md:flex-1 max-md:mr-0">
+      <div className="flex items-center gap-1 w-45 max-md:w-38 mr-14  max-md:mr-0">
         <PiKanbanFill className="text-[rgb(114,71,206)] text-4xl max-md:text-2xl" />
-        <h1 className="text-3xl max-md:text-xl font-bold tracking-tighter">kanban</h1>
+        <h1 className="text-3xl max-md:text-xl font-bold tracking-tighter">
+          kanban
+        </h1>
       </div>
-      <div className="flex items-center flex-1 justify-between max-md:justify-end">
-        <h1 className="text-[22px] max-md:text-sm max-md:hidden capitalize">
-          {currentBoard ? currentBoard.name : "No Board Selected"}
+      <div className="flex items-end flex-1 justify-between ">
+        <h1 className="text-[22px] max-md:text-[16px]  capitalize">
+          {currentBoard ? currentBoard.name + " Board" : "No Board Selected"}
         </h1>
         {currentBoard && (
           <div className="flex gap-3 ">
@@ -103,4 +105,3 @@ const Header = ({
 };
 
 export default Header;
- 
